@@ -52,11 +52,12 @@ export const del = async (dispatch, token, id) => {
   }
 }
 
-export const update = async (dispatch, token, id, warrantyInfo) => {
+export const update = async (dispatch, token, id, warrantyInfo, isSalePerson = false) => {
+  const url = `/api/${isSalePerson ? 'sale-person' : 'admin'}/warranty/${id}`;
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/admin/warranty/${id}`, warrantyInfo, {
+    await axiosInstance.put(url, warrantyInfo, {
       headers: { Authorization: token },
     });
 
@@ -113,7 +114,6 @@ export const updateSalePerson = async (dispatch, token, id, salePerson) => {
     dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
-
 
 export const getDetails = async (dispatch, token, id, isSalePerson = false) => {
   const url = `/api/${isSalePerson ? 'sale-person' : 'admin'}/warranty/${id}`

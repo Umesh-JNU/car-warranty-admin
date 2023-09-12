@@ -64,7 +64,7 @@ const ViewUser = () => {
       setModalShow={setModalShow}
       keyProps={keyProps}
       isImage={true}
-      image_url={user ? user.image_url : ""}
+      image_url={user ? user.profile_img : ""}
       reducerProps={{ error, loading, dispatch }}
     >
       <Details

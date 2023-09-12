@@ -39,9 +39,9 @@ export default function AdminLoginScreen() {
 
   useEffect(() => {
     if (token) {
-      setTimeout(() => {
+      // setTimeout(() => {
         navigate(userInfo.role === 'admin' ? "/admin/dashboard" : "/sale-person/dashboard");
-      }, 2000);
+      // }, 1000);
     }
     if (error) {
       toast.error(error, toastOptions);

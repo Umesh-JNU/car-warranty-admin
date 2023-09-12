@@ -21,7 +21,7 @@ export default function EditUserModel(props) {
 
 	const userData = {
 		email: "",
-		image_url: "",
+		profile_img: "",
 		firstname: "",
 		lastname: "",
 		mobile_no: "",
@@ -82,14 +82,14 @@ export default function EditUserModel(props) {
 	const uploadFileHandler = async (e, type) => {
 		if (!e.target.files[0]) {
 			// if (!file) {
-			setInfo({ ...info, image_url: null });
+			setInfo({ ...info, profile_img: null });
 			return;
 		}
 		if (e.target.files[0].size > 5000000) {
 			toast.warning("Image size is too large. (max size 5MB)", {
 				position: toast.POSITION.BOTTOM_CENTER,
 			});
-			setInfo({ ...info, image_url: null });
+			setInfo({ ...info, profile_img: null });
 			return;
 		}
 		try {
@@ -104,7 +104,7 @@ export default function EditUserModel(props) {
 				throw location.error;
 			}
 
-			setInfo({ ...info, image_url: location });
+			setInfo({ ...info, profile_img: location });
 			setTimeout(() => {
 				setUploadPercentage(0);
 				setIsUploaded(true);

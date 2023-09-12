@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { HiUsers } from "react-icons/hi";
 import { RiDashboard2Fill } from "react-icons/ri";
 import { FaShieldAlt, FaSignOutAlt, FaTasks } from "react-icons/fa";
+import { MdContactPhone } from "react-icons/md";
 import { BsListCheck, BsPersonLinesFill } from 'react-icons/bs';
 import { SiLevelsdotfyi } from 'react-icons/si';
 import { GrTransaction } from 'react-icons/gr';
@@ -15,6 +16,7 @@ const adminList = [
   { icon: <FaShieldAlt className="icon-md" />, text: "Warranty", url: "/admin/warranty" },
   { icon: <BsPersonLinesFill className="icon-md" />, text: "Sale Persons", url: "/admin/sale-person" },
   { icon: <GrTransaction className="icon-md" />, text: "Transaction", url: "/admin/transactions" },
+  { icon: <MdContactPhone className="icon-md" />, text: "Enquiry", url: "/admin/enquiry" },
   // { icon: <SiLevelsdotfyi className="icon-md" />, text: "Level", url: "/admin/levels" },
   // { icon: <BsListCheck className="icon-md" />, text: "Plan", url: "/admin/plans" },
 ];
@@ -31,6 +33,7 @@ const active_text = {
   "Sale Persons": "sale-person",
   Tasks: "task",
   Transaction: "transaction",
+  Enquiry: "enquiry",
   Level: "level",
   Plan: "plan",
 };

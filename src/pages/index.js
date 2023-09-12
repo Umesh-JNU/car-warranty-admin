@@ -14,10 +14,15 @@ import ViewSalePerson from "./salePerson/ViewSalePerson";
 import Transactions from "./transaction/Transaction";
 import ViewTransaction from "./transaction/ViewTransaction";
 
+import Enquiry from './enquiry/Enquiry';
+import AddEnquiry from "./enquiry/AddEnquiry";
+import ViewEnquiry from './enquiry/ViewEnquiry';
+
 export {
   Dashboard, AdminLoginScreen,
   Users, ViewUser,
   Warranty, ViewWarranty,
   SalePerson, AddSalePerson, ViewSalePerson,
-  Transactions, ViewTransaction
+  Transactions, ViewTransaction,
+  Enquiry, AddEnquiry, ViewEnquiry
 };
