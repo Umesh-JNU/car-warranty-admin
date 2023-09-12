@@ -1,4 +1,5 @@
 import Dashboard from "./Dashboard";
+import SaleDashboard from "./SaleDashboard";
 import AdminLoginScreen from "./AdminLoginScreen";
 
 import Users from './user/User';
@@ -19,7 +20,7 @@ import AddEnquiry from "./enquiry/AddEnquiry";
 import ViewEnquiry from './enquiry/ViewEnquiry';
 
 export {
-  Dashboard, AdminLoginScreen,
+  Dashboard, SaleDashboard, AdminLoginScreen,
   Users, ViewUser,
   Warranty, ViewWarranty,
   SalePerson, AddSalePerson, ViewSalePerson,

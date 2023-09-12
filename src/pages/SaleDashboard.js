@@ -6,7 +6,7 @@ import { Store } from "../states/store";
 // icons
 import { BiSolidShieldX } from "react-icons/bi";
 import { HiShieldCheck } from "react-icons/hi";
-import { GiNetworkBars } from "react-icons/gi";
+import { BsShieldFillPlus } from "react-icons/bs";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { IoIosPerson, IoIosPersonAdd, IoMdPie } from "react-icons/io";
 
@@ -33,7 +33,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function Dashboard() {
+export default function SaleDashboard() {
   const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
@@ -42,29 +42,6 @@ export default function Dashboard() {
   const { token } = state;
   const [time, setTime] = useState("month");
 
-  const monthlySales = (data) => {
-    const months = [
-      ['Jan', 0],
-      ['Feb', 0],
-      ['Mar', 0],
-      ['Apr', 0],
-      ['May', 0],
-      ['Jun', 0],
-      ['Jul', 0],
-      ['Aug', 0],
-      ['Sept', 0],
-      ['Oct', 0],
-      ['Nov', 0],
-      ['Dec', 0],
-    ];
-
-    data.forEach((x) => {
-      console.log({ x });
-      if (x.month) months[x.month - 1][1] = x.totalSales;
-    });
-    console.log({ months });
-    return months;
-  };
 
   useEffect(() => {
     console.log({ time });
@@ -72,7 +49,7 @@ export default function Dashboard() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axiosInstance.get(
-          `/api/admin/statistics/${time}`,
+          `/api/sale-person/statistics`,
           {
             headers: { Authorization: token },
           }
@@ -136,16 +113,16 @@ export default function Dashboard() {
                 <div className="small-box bg-info">
                   <div className="inner">
                     <h3>
-                      {summary.users && summary.users[0]
-                        ? summary.users[0].total
+                      {summary.awaited && summary.awaited[0]
+                        ? summary.awaited[0].total
                         : 0}
                     </h3>
-                    <p>Users</p>
+                    <p>Awaited Warranties</p>
                   </div>
                   <div className="icon">
-                    <IoIosPersonAdd />
+                    <BsShieldFillPlus />
                   </div>
-                  <Link to="/admin/users" className="small-box-footer">
+                  <Link to="/sale-person/tasks" className="small-box-footer">
                     More info {<FaArrowCircleRight />}
                   </Link>
                 </div>
@@ -168,7 +145,7 @@ export default function Dashboard() {
                   <div className="icon">
                     <BiSolidShieldX />
                   </div>
-                  <Link to="/admin/warranty" className="small-box-footer">
+                  <Link to="/sale-person/tasks" className="small-box-footer">
                     More info {<FaArrowCircleRight />}
                   </Link>
                 </div>
@@ -190,7 +167,7 @@ export default function Dashboard() {
                   <div className="icon">
                     <HiShieldCheck />
                   </div>
-                  <Link to="/admin/warranty" className="small-box-footer">
+                  <Link to="/sale-person/tasks" className="small-box-footer">
                     More info {<FaArrowCircleRight />}
                   </Link>
                 </div>
@@ -198,78 +175,6 @@ export default function Dashboard() {
             </Col>
           </Row>
 
-          <Row className="my-4">
-            <Col sm={9}>
-              <Card className="mb-3">
-                <Card.Header className="card-header-primary">
-                  Sales Report
-                </Card.Header>
-                <Card.Body>
-                  {loading ? (
-                    <Skeleton count={5} height={30} />
-                  ) : summary.sales.length === 0 ? (
-                    <MessageBox>No Sales</MessageBox>
-                  ) : (
-                    <>
-                      {time === "month" ?
-                        <Chart
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { title: "Weeks" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Weeks", "Total Sales"],
-                            ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
-                          ]}
-                        ></Chart> :
-                        <Chart
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Month", "Total Sales"],
-                            ...monthlySales(summary.sales)
-                          ]}
-                        ></Chart>
-                      }
-                      <div className="f-center graph-filter">
-                        <Form.Group>
-                          <Form.Check
-                            inline
-                            label="Month"
-                            type="radio"
-                            checked={time === "month"}
-                            // name="filterOption"
-                            // value="month"
-                            onChange={(e) => { e.preventDefault(); setTime("month"); }}
-                          />
-
-                          <Form.Check
-                            inline
-                            label="Year"
-                            type="radio"
-                            checked={time === "year"}
-                            // name="filterOption"
-                            // value="year"
-                            onChange={(e) => { e.preventDefault(); setTime("year"); }}
-                          />
-                        </Form.Group>
-                      </div>
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
           <ToastContainer />
         </>
       )}

@@ -383,3 +383,8 @@ table.table {
   background: #011831;
   color: white;
 }
+
+.graph-filter .form-check-input:checked {
+  background-color: #009688;
+  border-color: #009688;
+}
