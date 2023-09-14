@@ -46,11 +46,11 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
           { "inspection-passed": "Inspection Passed" },
           { "order-placed": "Order Placed" },
           { "doc-delivered": "Document Delivered" },
-          { "claim-requested": "Claim Requested" },
-          { "claim-inspection": "Claim Inspection" },
-          { "claim-inspection-failed": "Claim Inspection Failed" },
-          { "claim-in-progress": "Claim In-Progress" },
-          { "claim-setteled": "Claim Settled" }
+          // { "claim-requested": "Claim Requested" },
+          // { "claim-inspection": "Claim Inspection" },
+          // { "claim-inspection-failed": "Claim Inspection Failed" },
+          // { "claim-in-progress": "Claim In-Progress" },
+          // { "claim-setteled": "Claim Settled" }
         ]}
         grpStyle="mb-0"
         onChange={handleStatus}

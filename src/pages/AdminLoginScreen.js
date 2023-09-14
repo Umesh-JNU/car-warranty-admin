@@ -19,6 +19,7 @@ import { toastOptions } from "../utils/error";
 import { clearErrors, login } from "../states/actions";
 
 export default function AdminLoginScreen() {
+  const [role, setRole] = useState("admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,7 +41,7 @@ export default function AdminLoginScreen() {
   useEffect(() => {
     if (token) {
       // setTimeout(() => {
-        navigate(userInfo.role === 'admin' ? "/admin/dashboard" : "/sale-person/dashboard");
+      navigate(userInfo.role === 'admin' ? "/admin/dashboard" : "/sale-person/dashboard");
       // }, 1000);
     }
     if (error) {
@@ -58,6 +59,22 @@ export default function AdminLoginScreen() {
         </Link>
       </div>
 
+      <div className="f-center mb-4">
+        <div
+          className={`toggle-link-item ${role === "admin" && 'active-link'}`}
+          style={{ cursor: "pointer" }}
+          onClick={() => { setRole("admin") }}
+        >
+          Admin
+        </div>
+        <div
+          className={`toggle-link-item ${role === "sale-person" && 'active-link'}`}
+          style={{ cursor: "pointer" }}
+          onClick={() => { setRole("sale-person") }}
+        >
+          Sale Person
+        </div>
+      </div>
       <Card className="login-box">
         <Card.Body>
           <p className="text-center">Sign in to start your session</p>
@@ -100,7 +117,7 @@ export default function AdminLoginScreen() {
                     <Spinner animation="border" size="sm" />
                   </Button>
                 ) : (
-                  <Button type="submit" className="float-sm-end">
+                  <Button id="login_submit" type="submit" className="float-sm-end">
                     Sign In
                   </Button>
                 )}

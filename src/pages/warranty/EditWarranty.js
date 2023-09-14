@@ -47,11 +47,11 @@ export default function EditWarrantyModel(props) {
           { "inspection-passed": "Inspection Passed" },
           { "order-placed": "Order Placed" },
           { "doc-delivered": "Document Delivered" },
-          { "claim-requested": "Claim Requested" },
-          { "claim-inspection": "Claim Inspection" },
-          { "claim-inspection-failed": "Claim Inspection Failed" },
-          { "claim-in-progress": "Claim In-Progress" },
-          { "claim-setteled": "Claim Settled" }
+          // { "claim-requested": "Claim Requested" },
+          // { "claim-inspection": "Claim Inspection" },
+          // { "claim-inspection-failed": "Claim Inspection Failed" },
+          // { "claim-in-progress": "Claim In-Progress" },
+          // { "claim-setteled": "Claim Settled" }
         ]
       }
     }

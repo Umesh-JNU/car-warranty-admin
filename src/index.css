@@ -388,3 +388,20 @@ table.table {
   background-color: #009688;
   border-color: #009688;
 }
+
+.toggle-link-item {
+  text-decoration: none;
+  font-weight: 700;
+  color: #575757;
+  font-size: large;
+  padding: 0 1rem;
+}
+
+.toggle-link-item:first-child {
+  border-right: 2px solid #575757;
+}
+
+.toggle-link-item.active-link,
+.toggle-link-item:hover {
+  color: #aa4bff;
+}

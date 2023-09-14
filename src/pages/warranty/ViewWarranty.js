@@ -1,3 +1,5 @@
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 import { useParams } from "react-router-dom";
@@ -13,6 +15,7 @@ import { ImCross } from "react-icons/im";
 import { getDateTime } from "../../utils/function";
 import EditWarrantyModel from "./EditWarranty";
 import UploadDocument from "./UploadDocument";
+import { Document, Page, pdfjs } from "react-pdf";
 
 const boolComp = (val) => {
   return val ? <FaCheck className="green" /> : <ImCross className="red" />;
@@ -43,7 +46,7 @@ const keyProps = {
 const Details = ({ title, loading, data, detailKey, fields }) => {
   const keyList = Object.entries(fields);
 
-  // console.log({ loading, data, detailKey, fields })
+  console.log({ loading, data, detailKey, fields })
   return (
     <>
       <u><h4 className="mt-3">{title}</h4></u>
@@ -78,6 +81,8 @@ const ViewWarranty = () => {
   });
 
   useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
     (async () => {
       const isSalePerson = role === 'sale-person';
       await getDetails(dispatch, token, id, isSalePerson);
@@ -124,11 +129,36 @@ const ViewWarranty = () => {
         detailKey="vehicleInfo"
         fields={{ "Purchase Date": "purchase_date", "Service History": "service_history" }}
       />
-      <u><h4 className="mt-3">Documents</h4></u>
 
+      <u><h4 className="mt-3">Documents</h4></u>
       <Row>
-        <Col md={6}>
-          {loading ? <Skeleton count={5} height={35} /> : <Table responsive striped bordered hover>
+        {loading ? <Skeleton count={5} height={35} /> :
+          warranty.document ?
+            <a href={warranty.document.url} target="_blank">{warranty.document.desc}</a>
+            :
+            <p className="mb-0">
+              <b>No Document</b>
+            </p>}
+
+            {/*  <>
+               <Col md={2}>
+                 <p className="mb-0">
+                   <strong>{warranty.document.desc}</strong>
+                 </p>
+               </Col>
+               <Col>
+                 <Document file="https://arxiv.org/pdf/2212.08011.pdf" onLoadSuccess={({ number }) => { console.log(number) }}>
+                   <Page height={200} pageNumber={1} />
+                 </Document>
+               </Col>
+             </> :
+             <Col>
+               <p className="mb-0">
+                 <b>No Document</b>
+               </p>
+             </Col>} */}
+
+        {/* <Table responsive striped bordered hover>
             <tbody>
               {warranty.documents.map(({ url, desc }, i) =>
                 <tr key={url}>
@@ -139,8 +169,8 @@ const ViewWarranty = () => {
                 </tr>
               )}
             </tbody>
-          </Table>}
-        </Col>
+          </Table>} */}
+
       </Row>
 
       {role === 'sale-person' && <div className="my-3">
