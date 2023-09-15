@@ -45,7 +45,7 @@ const boolComp = (val) => {
 }
 
 const isDate = (date) => {
-  return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+  return ((date instanceof Date) && new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
 }
 
 const dynamicComp = (val) => {

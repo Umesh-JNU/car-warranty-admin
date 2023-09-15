@@ -9,7 +9,7 @@ export const reducer = (state, action) => {
     case "UPDATE_REQUEST":
       return { ...state, loadingUpdate: true };
     case "UPDATE_SUCCESS":
-      return { ...state, loadingUpdate: false };
+      return { ...state, loadingUpdate: false, success: true };
     case "UPDATE_FAIL":
       return { ...state, loadingUpdate: false };
 

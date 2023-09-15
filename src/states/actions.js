@@ -56,10 +56,10 @@ export const updateProfile = async (dispatch, token, userInfo) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/user/update-profile`, userInfo, {
+    const { data } = await axiosInstance.put(`/api/user/update-profile`, userInfo, {
       headers: { Authorization: token },
     });
-
+    console.log("update profile", { data })
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
     }, 2000);

@@ -24,6 +24,8 @@ export default function EditUserModel(props) {
     lastname: "",
     mobile_no: "",
     addr: "",
+    city: "",
+    postcode: ""
   };
   const userAttr = [
     {
@@ -54,12 +56,34 @@ export default function EditUserModel(props) {
         label: "Mobile No.",
         name: "mobile_no",
       }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Address",
+        name: "addr",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "City",
+        name: "city",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Postcode",
+        name: "postcode",
+        required: true,
+      }
     }
   ]
   const [info, setInfo] = useState(userData);
-  const handleInput = (e) => {
-    setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
-  }
+  const [preview, setPreview] = useState("");
 
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -69,6 +93,7 @@ export default function EditUserModel(props) {
     if (!e.target.files[0]) {
       // if (!file) {
       setInfo({ ...info, profile_img: null });
+      setPreview("");
       return;
     }
     if (e.target.files[0].size > 5000000) {
@@ -76,6 +101,7 @@ export default function EditUserModel(props) {
         position: toast.POSITION.BOTTOM_CENTER,
       });
       setInfo({ ...info, profile_img: null });
+      setPreview("");
       return;
     }
     try {
@@ -91,6 +117,8 @@ export default function EditUserModel(props) {
       }
 
       setInfo({ ...info, profile_img: location });
+      setPreview(location);
+
       setTimeout(() => {
         setUploadPercentage(0);
         setIsUploaded(true);
@@ -111,9 +139,12 @@ export default function EditUserModel(props) {
         firstname: user.firstname,
         lastname: user.lastname,
         mobile_no: user.mobile_no,
-        addr: user.addr,
+        addr: user.addr.address,
+        city: user.addr.city,
+        postcode: user.addr.postcode,
         profile_img: user.profile_img
       });
+      setPreview(user.profile_img)
     }
 
     (async () => {
@@ -125,63 +156,46 @@ export default function EditUserModel(props) {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await updateProfile(dispatch, token, info);
+    await updateProfile(dispatch, token, {
+      firstname: info.firstname,
+      lastname: info.lastname,
+      email: info.email,
+      mobile_no: info.mobile_no,
+      profile_img: info.profile_img,
+      addr: {
+        address: info.addr,
+        city: info.city,
+        postcode: info.postcode
+      }
+    });
     if (success) {
       resetForm();
+      setPreview("");
     }
   };
 
   return (
     <EditForm
       {...props}
-      title="Edit User"
+      title="Update Profile"
       data={info}
       setData={setInfo}
       inputFieldProps={userAttr}
       submitHandler={submitHandler}
-      target="/admin/users"
+      target=""
       successMessage="User Updated Successfully! Redirecting..."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >
-      <Row>
-        <Col md={12}>
-          <TextInput
-            value={info?.addr?.address}
-            required="true"
-            label="Address"
-            name="address"
-            onChange={handleInput}
-          />
-        </Col>
-        <Col md={6}>
-          <TextInput
-            value={info?.addr?.city}
-            required="true"
-            label="City"
-            name="city"
-            onChange={handleInput}
-          />
-        </Col>
-        <Col md={6}>
-          <TextInput
-            value={info?.addr?.postcode}
-            required="true"
-            label="Postcode"
-            name="postcode"
-            onChange={handleInput}
-          />
-        </Col>
-      </Row>
-      <>
-        <TextInput label="Upload Image" type="file" accept="image/*" onChange={(e) => uploadFileHandler(e)} />
-        {uploadPercentage > 0 && (
-          <ProgressBar
-            now={uploadPercentage}
-            active
-            label={`${uploadPercentage}%`}
-          />
-        )}
-      </>
+      <TextInput label="Upload Image" type="file" accept="image/*" onChange={(e) => uploadFileHandler(e)} />
+      {uploadPercentage > 0 && (
+        <ProgressBar
+          now={uploadPercentage}
+          active
+          label={`${uploadPercentage}%`}
+        />
+      )}
+
+      {preview && <img src={preview} width={100} className="img-fluid" />}
     </EditForm>
   );
 }

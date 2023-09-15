@@ -23,12 +23,13 @@ export default function EditTransactionModel(props) {
     firstname: "",
     lastname: "",
     email: "",
-    password: "",
-    mobile_no: "",
-    profile_img: "",
+    // password: "",
     addr: "",
     city: "",
-    postcode: ""
+    postcode: "",
+    mobile_no: "",
+    profile_img: "",
+
   };
 
   const salePersonAttr = [
@@ -65,14 +66,14 @@ export default function EditTransactionModel(props) {
         required: true,
       }
     },
-    {
-      type: "text",
-      props: {
-        label: "Password",
-        name: "password",
-        required: true,
-      }
-    },
+    // {
+    //   type: "text",
+    //   props: {
+    //     label: "Password",
+    //     name: "password",
+    //     required: true,
+    //   }
+    // },
     {
       type: "text",
       props: {
@@ -100,9 +101,6 @@ export default function EditTransactionModel(props) {
   ]
   const [info, setInfo] = useState(salePersonData);
   const [preview, setPreview] = useState("");
-  const handleInput = (e) => {
-    setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
-  }
 
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -157,7 +155,9 @@ export default function EditTransactionModel(props) {
         firstname: salePerson.firstname,
         lastname: salePerson.lastname,
         mobile_no: salePerson.mobile_no,
-        addr: salePerson.addr,
+        addr: salePerson.addr.address,
+        city: salePerson.addr.city,
+        postcode: salePerson.addr.postcode,
         profile_img: salePerson.profile_img
       });
       setPreview(salePerson.profile_img)
@@ -172,7 +172,18 @@ export default function EditTransactionModel(props) {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await update(dispatch, token, id, info);
+    await update(dispatch, token, id, {
+      firstname: info.firstname,
+      lastname: info.lastname,
+      email: info.email,
+      mobile_no: info.mobile_no,
+      profile_img: info.profile_img,
+      addr: {
+        address: info.addr,
+        city: info.city,
+        postcode: info.postcode
+      }
+    });
     if (success) {
       resetForm();
       setPreview("");
@@ -191,46 +202,15 @@ export default function EditTransactionModel(props) {
       successMessage="Sale Person Updated Successfully! Redirecting..."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >
-      <Row>
-        <Col md={12}>
-          <TextInput
-            value={info?.addr?.address}
-            required="true"
-            label="Address"
-            name="address"
-            onChange={handleInput}
-          />
-        </Col>
-        <Col md={6}>
-          <TextInput
-            value={info?.addr?.city}
-            required="true"
-            label="City"
-            name="city"
-            onChange={handleInput}
-          />
-        </Col>
-        <Col md={6}>
-          <TextInput
-            value={info?.addr?.postcode}
-            required="true"
-            label="Postcode"
-            name="postcode"
-            onChange={handleInput}
-          />
-        </Col>
-      </Row>
-      <>
-        <TextInput label="Upload Image" type="file" accept="image/*" onChange={(e) => uploadFileHandler(e)} />
-        {uploadPercentage > 0 && (
-          <ProgressBar
-            now={uploadPercentage}
-            active
-            label={`${uploadPercentage}%`}
-          />
-        )}
-        {preview && <img src={preview} width={100} className="img-fluid" />}
-      </>
+      <TextInput label="Upload Image" type="file" accept="image/*" onChange={(e) => uploadFileHandler(e)} />
+      {uploadPercentage > 0 && (
+        <ProgressBar
+          now={uploadPercentage}
+          active
+          label={`${uploadPercentage}%`}
+        />
+      )}
+      {preview && <img src={preview} width={100} className="img-fluid" />}
     </EditForm>
   );
 }

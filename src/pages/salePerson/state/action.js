@@ -53,6 +53,7 @@ export const del = async (dispatch, token, id) => {
 }
 
 export const update = async (dispatch, token, id, info) => {
+  console.log("sale person update", { info })
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 

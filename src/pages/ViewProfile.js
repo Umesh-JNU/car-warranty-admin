@@ -63,7 +63,7 @@ const ViewProfile = () => {
       data={user}
       setModalShow={setModalShow}
       keyProps={keyProps}
-      isImage={true}
+      isImage="true"
       image_url={user ? user.profile_img : ""}
       reducerProps={{ error, loading, dispatch }}
     >
@@ -77,6 +77,7 @@ const ViewProfile = () => {
       <EditProfileModel
         show={modalShow}
         onHide={() => setModalShow(false)}
+        reload={async () => { await getProfile(dispatch, token) }}
       />
       {!modalShow && <ToastContainer />}
     </ViewCard>
