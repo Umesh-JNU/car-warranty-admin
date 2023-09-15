@@ -32,3 +32,38 @@ export const clearSuccess = async (dispatch) => {
     dispatch({ type: 'CLEAR_SUCCESS' });
   }, 2000);
 }
+
+export const getProfile = async (dispatch, token) => {
+  try {
+    dispatch({ type: "FETCH_REQUEST" });
+    const { data } = await axiosInstance.get("/api/user/profile",
+      { headers: { Authorization: token } }
+    );
+
+    console.log("data", data);
+    if (data) {
+      dispatch({ type: "FETCH_SUCCESS", payload: data.user });
+    }
+    else {
+      dispatch({ type: "FETCH_FAIL", payload: getError(data) });
+    }
+  } catch (err) {
+    dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+  }
+}
+
+export const updateProfile = async (dispatch, token, userInfo) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    await axiosInstance.put(`/api/user/update-profile`, userInfo, {
+      headers: { Authorization: token },
+    });
+
+    setTimeout(() => {
+      dispatch({ type: "UPDATE_SUCCESS" });
+    }, 2000);
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+  }
+};

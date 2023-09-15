@@ -83,6 +83,8 @@ export default function Users() {
           pageHandler={curPageHandler}
           search={true}
           searchProps={{ searchInput, setSearchInput, setQuery }}
+          isTitle="true"
+          title="Users"
         >
           {users &&
             users.map((user, i) => (

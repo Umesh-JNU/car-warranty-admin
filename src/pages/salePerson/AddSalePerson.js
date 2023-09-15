@@ -1,10 +1,12 @@
 import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, AddForm } from "../../components";
+import { useTitle, AddForm, TextInput } from "../../components";
+import { uploadImage } from "../../utils/uploadImage";
+import { ProgressBar } from "react-bootstrap";
 
 export default function AddTransaction() {
   const { state } = useContext(Store);
@@ -94,6 +96,55 @@ export default function AddTransaction() {
     }
   ]
   const [info, setInfo] = useState(salePersonData);
+  const [preview, setPreview] = useState("");
+  const handleInput = (e) => {
+    setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
+  }
+
+  const [uploadPercentage, setUploadPercentage] = useState(0);
+  const [isUploaded, setIsUploaded] = useState(false);
+  const uploadPercentageHandler = (per) => { setUploadPercentage(per); };
+
+  const uploadFileHandler = async (e, type) => {
+    if (!e.target.files[0]) {
+      // if (!file) {
+      setInfo({ ...info, profile_img: null });
+      setPreview("");
+      return;
+    }
+    if (e.target.files[0].size > 5000000) {
+      toast.warning("Image size is too large. (max size 5MB)", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      setInfo({ ...info, profile_img: null });
+      setPreview("");
+      return;
+    }
+    try {
+      // if (e.target.files[0]) {
+      const location = await uploadImage(
+        e.target.files[0],
+        // file,
+        token,
+        uploadPercentageHandler
+      );
+      if (location.error) {
+        throw location.error;
+      }
+
+      setInfo({ ...info, profile_img: location });
+      setPreview(location);
+
+      setTimeout(() => {
+        setUploadPercentage(0);
+        setIsUploaded(true);
+      }, 1000);
+    } catch (error) {
+      toast.error(error, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+    }
+  };
 
   const resetForm = () => {
     setInfo(salePersonData);
@@ -116,6 +167,9 @@ export default function AddTransaction() {
       }
     });
     resetForm();
+    setPreview("");
+    setUploadPercentage(0);
+    setIsUploaded(false);
   };
 
   useTitle("Create Sale Person");
@@ -130,6 +184,15 @@ export default function AddTransaction() {
       successMessage="Sale Person Created Successfully!"
       reducerProps={{ loading, error, success, dispatch }}
     >
+      <TextInput label="Upload Image" type="file" accept="image/*" onChange={(e) => uploadFileHandler(e)} />
+      {uploadPercentage > 0 && (
+        <ProgressBar
+          now={uploadPercentage}
+          active
+          label={`${uploadPercentage}%`}
+        />
+      )}
+      {preview && <img src={preview} width={100} className="img-fluid" />}
       <ToastContainer />
     </AddForm>
   );

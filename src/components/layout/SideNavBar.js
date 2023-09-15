@@ -82,10 +82,10 @@ export default function SideNavbar({ isExpanded }) {
             {/* Sidebar user panel (optional) */}
             <div className="user-panel mt-3 pb-3 mb-3 d-flex">
               <div className="info">
-                <Link to="/view-profile" className="d-block">
-                  {userInfo.avatar && (
+                <Link to={`${userInfo.role}/view-profile`} className="d-block">
+                  {userInfo.profile_img && (
                     <img
-                      src={userInfo.avatar}
+                      src={userInfo.profile_img}
                       alt=""
                       style={{
                         width: "40px",

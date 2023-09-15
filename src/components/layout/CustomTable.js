@@ -71,7 +71,7 @@ export default function CustomTable(props) {
             </InputGroup.Text>
           </InputGroup>
         </div>}
-        {isTitle && <h3>{title}</h3>}
+        {isTitle && <h3 className="mb-0">{title}</h3>}
       </Card.Header>
       <Card.Body>
         <Table responsive striped bordered hover>
@@ -89,7 +89,7 @@ export default function CustomTable(props) {
       </Card.Body>
       <Card.Footer>
         <div className="float-start d-flex align-items-center mt-3">
-          <p className="p-bold m-0 me-3">Row No.</p>
+          <p className="p-bold m-0 me-3">Number pf Row</p>
           <Form.Group controlId="resultPerPage">
             <Form.Select
               value={resultPerPage}

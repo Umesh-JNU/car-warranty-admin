@@ -4,7 +4,7 @@ import { Store } from "./states/store";
 
 import { AdminProtectedRoute, SaleProtectedRoute, UnprotectedRoute } from "./routes";
 import { Header, Footer, SideNavBar, NotFound } from "./components";
-import { AdminLoginScreen, Dashboard, SaleDashboard, Users, ViewUser, Warranty, ViewWarranty, SalePerson, AddSalePerson, ViewSalePerson, Transactions, ViewTransaction, Enquiry, AddEnquiry, ViewEnquiry } from "./pages";
+import { AdminLoginScreen, Dashboard, Profile, SaleDashboard, Users, ViewUser, Warranty, ViewWarranty, SalePerson, AddSalePerson, ViewSalePerson, Transactions, ViewTransaction, Enquiry, AddEnquiry, ViewEnquiry } from "./pages";
 
 function App() {
   const { state } = useContext(Store);
@@ -17,6 +17,7 @@ function App() {
 
   const routeList = [
     { path: "/admin/dashboard", comp: <Dashboard /> },
+    { path: "/admin/view-profile", comp: <Profile /> },
     { path: "/admin/users", comp: <Users /> },
     { path: "/admin/view/user/:id", comp: <ViewUser /> },
     { path: "/admin/warranty", comp: <Warranty /> },
@@ -33,6 +34,7 @@ function App() {
 
   const salePersonRouteList = [
     { path: "/sale-person/dashboard", comp: <SaleDashboard /> },
+    { path: "/sale-person/view-profile", comp: <Profile /> },
     { path: "/sale-person/tasks", comp: <Warranty /> },
     { path: "/sale-person/view/task/:id", comp: <ViewWarranty /> },
   ];

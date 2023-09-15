@@ -1,43 +1,36 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { Store } from "../../states/store";
-import { useParams } from "react-router-dom";
-import reducer from "./state/reducer";
-import { getDetails, update } from "./state/action";
-import { EditForm, TextInput } from "../../components";
-import { uploadImage } from "../../utils/uploadImage";
+import { Store } from "../states/store";
+import { reducer } from "../states/reducers";
+import { getProfile, updateProfile } from "../states/actions";
+import { EditForm, TextInput } from "../components";
+import { uploadImage } from "../utils/uploadImage";
 import { Col, ProgressBar, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-export default function EditTransactionModel(props) {
+export default function EditUserModel(props) {
   const { state } = useContext(Store);
   const { token } = state;
-  const { id } = useParams();  // sale-person/:id
 
-  const [{ loading, error, loadingUpdate, salePerson, success }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, loadingUpdate, data: user, success }, dispatch] = useReducer(reducer, {
     loading: true,
     loadingUpdate: false,
     error: "",
   });
 
-  const salePersonData = {
+  const userData = {
+    email: "",
+    profile_img: "",
     firstname: "",
     lastname: "",
-    email: "",
-    password: "",
     mobile_no: "",
-    profile_img: "",
     addr: "",
-    city: "",
-    postcode: ""
   };
-
-  const salePersonAttr = [
+  const userAttr = [
     {
       type: "text",
       props: {
         label: "Firstname",
         name: "firstname",
-        required: true,
       }
     },
     {
@@ -45,7 +38,6 @@ export default function EditTransactionModel(props) {
       props: {
         label: "Lastname",
         name: "lastname",
-        required: true,
       }
     },
     {
@@ -53,7 +45,6 @@ export default function EditTransactionModel(props) {
       props: {
         label: "Email",
         name: "email",
-        type: "email",
         required: true,
       }
     },
@@ -62,44 +53,10 @@ export default function EditTransactionModel(props) {
       props: {
         label: "Mobile No.",
         name: "mobile_no",
-        required: true,
-      }
-    },
-    {
-      type: "text",
-      props: {
-        label: "Password",
-        name: "password",
-        required: true,
-      }
-    },
-    {
-      type: "text",
-      props: {
-        label: "Address",
-        name: "addr",
-        required: true,
-      }
-    },
-    {
-      type: "text",
-      props: {
-        label: "City",
-        name: "city",
-        required: true,
-      }
-    },
-    {
-      type: "text",
-      props: {
-        label: "Postcode",
-        name: "postcode",
-        required: true,
       }
     }
   ]
-  const [info, setInfo] = useState(salePersonData);
-  const [preview, setPreview] = useState("");
+  const [info, setInfo] = useState(userData);
   const handleInput = (e) => {
     setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
   }
@@ -112,7 +69,6 @@ export default function EditTransactionModel(props) {
     if (!e.target.files[0]) {
       // if (!file) {
       setInfo({ ...info, profile_img: null });
-      setPreview("");
       return;
     }
     if (e.target.files[0].size > 5000000) {
@@ -120,7 +76,6 @@ export default function EditTransactionModel(props) {
         position: toast.POSITION.BOTTOM_CENTER,
       });
       setInfo({ ...info, profile_img: null });
-      setPreview("");
       return;
     }
     try {
@@ -136,8 +91,6 @@ export default function EditTransactionModel(props) {
       }
 
       setInfo({ ...info, profile_img: location });
-      setPreview(location);
-
       setTimeout(() => {
         setUploadPercentage(0);
         setIsUploaded(true);
@@ -150,45 +103,44 @@ export default function EditTransactionModel(props) {
   };
 
   useEffect(() => {
-    if (salePerson && salePerson._id === id) {
-      console.log({ salePerson })
+    if (user) {
+      console.log({ user })
       setInfo({
-        email: salePerson.email,
-        firstname: salePerson.firstname,
-        lastname: salePerson.lastname,
-        mobile_no: salePerson.mobile_no,
-        addr: salePerson.addr,
-        profile_img: salePerson.profile_img
+        email: user.email,
+        // password: user.password,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        mobile_no: user.mobile_no,
+        addr: user.addr,
+        profile_img: user.profile_img
       });
-      setPreview(salePerson.profile_img)
     }
 
     (async () => {
-      await getDetails(dispatch, token, id);
+      await getProfile(dispatch, token);
     })();
-  }, [id, props.show]);
+  }, [token, props.show]);
 
-  const resetForm = () => { setInfo(salePersonData); };
+  const resetForm = () => { setInfo(userData); };
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await update(dispatch, token, id, info);
+    await updateProfile(dispatch, token, info);
     if (success) {
       resetForm();
-      setPreview("");
     }
   };
 
   return (
     <EditForm
       {...props}
-      title="Edit Sale Person"
+      title="Edit User"
       data={info}
       setData={setInfo}
-      inputFieldProps={salePersonAttr}
+      inputFieldProps={userAttr}
       submitHandler={submitHandler}
-      target="/admin/sale-person"
-      successMessage="Sale Person Updated Successfully! Redirecting..."
+      target="/admin/users"
+      successMessage="User Updated Successfully! Redirecting..."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >
       <Row>
@@ -229,7 +181,6 @@ export default function EditTransactionModel(props) {
             label={`${uploadPercentage}%`}
           />
         )}
-        {preview && <img src={preview} width={100} className="img-fluid" />}
       </>
     </EditForm>
   );

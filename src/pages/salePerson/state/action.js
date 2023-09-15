@@ -6,7 +6,7 @@ export const create = async (dispatch, token, input) => {
   try {
     dispatch({ type: 'ADD_REQUEST' });
     const { data } = await axiosInstance.post(
-      "/api/admin/sale-person", input,
+      "/api/admin/sale-person", { ...input, role: "sale-person" },
       { headers: { Authorization: token } }
     );
 

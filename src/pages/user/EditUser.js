@@ -66,7 +66,7 @@ export default function EditUserModel(props) {
 				name: "role",
 				value: 'user',
 				placeholder: "Select Role",
-				options: [{ 'user': 'User' }, { 'admin': 'Admin' }]
+				options: [{ 'user': 'User' }, { 'sale-person': 'Sale Person' }, { 'admin': 'Admin' }]
 			}
 		}
 	]
@@ -121,12 +121,13 @@ export default function EditUserModel(props) {
 			console.log({ user })
 			setInfo({
 				email: user.email,
-				password: user.password,
+				// password: user.password,
 				firstname: user.firstname,
 				lastname: user.lastname,
 				mobile_no: user.mobile_no,
 				role: user.role,
-				addr: user.addr
+				addr: user.addr,
+				profile_img: user.profile_img
 			});
 		}
 

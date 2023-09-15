@@ -29,24 +29,25 @@ export default function Header({ sidebarHandler }) {
                   id="user_profile"
                   className="right-profile-logo"
                 >
-                  <img
-                    src={userInfo.avatar}
-                    alt="profile_img"
-                    className="dropdown-logo"
-                  />
-                  {/* <FaUserCircle size={"25px"} /> */}
+                  {userInfo.profile_img ?
+                    <img
+                      src={userInfo.profile_img}
+                      alt="profile_img"
+                      className="dropdown-logo"
+                    /> :
+                    <FaUserCircle size={"25px"} />}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   <Dropdown.Header>
                     Signed in as
                     <br />
-                    <b>{userInfo.fullname}</b>
+                    <b>{userInfo.firstname} {userInfo.lastname}</b>
                   </Dropdown.Header>
 
                   <Dropdown.Divider />
                   <Dropdown.Item>
-                    <Link to="/view-profile/" className="dropdown-item">
+                    <Link to={`${userInfo.role}/view-profile`} className="dropdown-item">
                       <FaUser className="me-2" /> Profile
                     </Link>
                   </Dropdown.Item>

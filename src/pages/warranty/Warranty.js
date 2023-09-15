@@ -131,6 +131,8 @@ export default function Warranty() {
       ) : (
         <Card>
           <Card.Header>
+            {/* isTitle="true" */}
+            {/* title="Users" */}
             <div className="float-end d-flex align-items-center">
               <p className="p-bold m-0 me-3">Filter by Plan</p>
               <Form.Group controlId="plan">
@@ -149,6 +151,7 @@ export default function Warranty() {
                 </Form.Select>
               </Form.Group>
             </div>
+            <h3 className="mb-0">Warranties</h3>
           </Card.Header>
           <Card.Body>
             <Table responsive striped bordered hover>
@@ -200,7 +203,7 @@ export default function Warranty() {
           </Card.Body>
           <Card.Footer>
             <div className="float-start d-flex align-items-center mt-3">
-              <p className="p-bold m-0 me-3">Row No.</p>
+              <p className="p-bold m-0 me-3">Number of Row</p>
               <Form.Group controlId="resultPerPage">
                 <Form.Select
                   value={resultPerPage}
