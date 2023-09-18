@@ -15,6 +15,10 @@ export const reducer = (state, action) => {
 
     case "CLEAR_ERROR":
       return { ...state, error: null };
+
+    case "CLEAR_SUCCESS":
+      return { ...state, success: false };
+
     default:
       return state;
   }

@@ -71,9 +71,10 @@ export default function EditUserModel(props) {
 		}
 	]
 	const [info, setInfo] = useState(userData);
+	const [preview, setPreview] = useState("");
 	const handleInput = (e) => {
-    setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
-  }
+		setInfo({ ...info, addr: { ...info.addr, [e.target.name]: e.target.value } });
+	}
 
 	const [uploadPercentage, setUploadPercentage] = useState(0);
 	const [isUploaded, setIsUploaded] = useState(false);
@@ -83,6 +84,7 @@ export default function EditUserModel(props) {
 		if (!e.target.files[0]) {
 			// if (!file) {
 			setInfo({ ...info, profile_img: null });
+			setPreview("");
 			return;
 		}
 		if (e.target.files[0].size > 5000000) {
@@ -90,6 +92,7 @@ export default function EditUserModel(props) {
 				position: toast.POSITION.BOTTOM_CENTER,
 			});
 			setInfo({ ...info, profile_img: null });
+			setPreview("");
 			return;
 		}
 		try {
@@ -105,6 +108,7 @@ export default function EditUserModel(props) {
 			}
 
 			setInfo({ ...info, profile_img: location });
+			setPreview(location);
 			setTimeout(() => {
 				setUploadPercentage(0);
 				setIsUploaded(true);
@@ -129,6 +133,7 @@ export default function EditUserModel(props) {
 				addr: user.addr,
 				profile_img: user.profile_img
 			});
+			setPreview(user.profile_img);
 		}
 
 		(async () => {
@@ -196,6 +201,7 @@ export default function EditUserModel(props) {
 						label={`${uploadPercentage}%`}
 					/>
 				)}
+				{preview && <img src={preview} width={100} className="img-fluid" />}
 			</>
 		</EditForm>
 	);

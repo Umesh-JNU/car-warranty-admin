@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
-import { useTitle, ViewCard } from "../../components";
+import { CustomSkeleton, useTitle, ViewButton, ViewCard } from "../../components";
 import reducer from "./state/reducer";
 import { getDetails } from "./state/action";
 import EditUserModel from "./EditUser";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Table } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
 
 const keyProps = {
-	"Email": "email",	"Firstname": "firstname",	"Lastname": "lastname",	"Mobile No.": "mobile_no",	"Role": "role", "Created At": "createdAt", "Last Update": "updatedAt"
+  "Email": "email", "Firstname": "firstname", "Lastname": "lastname", "Mobile No.": "mobile_no", "Role": "role", "Created At": "createdAt", "Last Update": "updatedAt"
 };
 
 const Details = ({ title, loading, data, detailKey, fields }) => {
@@ -39,6 +39,7 @@ const Details = ({ title, loading, data, detailKey, fields }) => {
 };
 
 const ViewUser = () => {
+  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
   const { id } = useParams(); // user/:id
@@ -49,7 +50,7 @@ const ViewUser = () => {
     error: "",
   });
 
-  console.log({error, user})
+  console.log({ error, user })
   useEffect(() => {
     (async () => {
       await getDetails(dispatch, token, id);
@@ -74,6 +75,35 @@ const ViewUser = () => {
         detailKey="addr"
         fields={{ "Address": "address", "City": "city", "Postcode": "postcode" }}
       />
+      <h3 className="my-3">{user?.role === 'sale-person' ? "Tasks" : "Warranties"}</h3>
+      {loading ? <CustomSkeleton resultPerPage={5} column={8} />
+        : user.warranties.length ?
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                <th>S. No</th>
+                <th>Vehicle Reg. No.</th>
+                <th>Plan Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {user.warranties.map((warranty, i) => (
+                <tr key={warranty._id} className="odd">
+                  <td className="text-center">{i + 1}</td>
+                  <td>{warranty.vehicleDetails?.reg_num}</td>
+                  <td>{warranty.plan}</td>
+                  <td>{warranty.amount}</td>
+                  <td>{warranty.status}</td>
+                  <td>
+                    <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table> : user?.role === 'sale-person' ? "No Assigned Tasks" : "No Warranties"}
       <EditUserModel
         show={modalShow}
         onHide={() => setModalShow(false)}

@@ -52,7 +52,7 @@ export const getProfile = async (dispatch, token) => {
   }
 }
 
-export const updateProfile = async (dispatch, token, userInfo) => {
+export const updateProfile = async (ctxDispatch, dispatch, token, userInfo) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
@@ -61,6 +61,7 @@ export const updateProfile = async (dispatch, token, userInfo) => {
     });
     console.log("update profile", { data })
     setTimeout(() => {
+      ctxDispatch({ type: "PROFILE_UPDATE", payload: data.user });
       dispatch({ type: "UPDATE_SUCCESS" });
     }, 2000);
   } catch (err) {

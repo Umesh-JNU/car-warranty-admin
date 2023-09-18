@@ -8,7 +8,7 @@ import { Col, ProgressBar, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 export default function EditUserModel(props) {
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { token } = state;
 
   const [{ loading, error, loadingUpdate, data: user, success }, dispatch] = useReducer(reducer, {
@@ -156,7 +156,7 @@ export default function EditUserModel(props) {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await updateProfile(dispatch, token, {
+    await updateProfile(ctxDispatch, dispatch, token, {
       firstname: info.firstname,
       lastname: info.lastname,
       email: info.email,

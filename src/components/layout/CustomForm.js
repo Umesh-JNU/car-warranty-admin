@@ -13,7 +13,7 @@ import React, { useEffect } from 'react'
 import { Card, Col, Form, Row, Spinner, Button, Modal, Container } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { toastOptions } from '../../utils/error';
-import { clearErrors } from '../../states/actions';
+import { clearErrors, clearSuccess } from '../../states/actions';
 import { useNavigate } from 'react-router-dom';
 import MotionDiv from './MotionDiv';
 import SubmitButton from './SubmitButton';
@@ -109,7 +109,7 @@ const RadioInput = (props) => {
       value={data[props.name]}
     />
  */
-const SelectInput = ({options, ...props}) => {
+const SelectInput = ({ options, ...props }) => {
   console.log("select", { props })
   const grpStyle = props.grpStyle || "mb-3";
   return (
@@ -214,6 +214,7 @@ const EditForm = (props) => {
       setTimeout(() => {
         if (target) navigate(target);
         else { props.onHide(); props.reload(); };
+        clearSuccess(dispatch);
       }, 3000);
     }
   }, [success]);
