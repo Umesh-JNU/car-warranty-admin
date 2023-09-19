@@ -2,16 +2,18 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 import { useParams } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useTitle, ViewCard } from "../../components";
 import reducer from "./state/reducer";
-import { getDetails } from "./state/action";
-import { Col, Row } from "react-bootstrap";
+import { getDetails, refund } from "./state/action";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
+import { getError, toastOptions } from "../../utils/error";
+import { clearErrors } from "../../states/actions";
 // import EditTransactionModel from "./EditTransaction";
 
 const keyProps = {
-	"Plan": "plan",	"Amount": "amount",	"Status": "status",	"Warranty": "warranty", "Method": "method", "Created At": "createdAt", "Last Update": "updatedAt"
+  "Plan": "plan", "Amount": "amount", "Status": "status", "Warranty": "warranty", "Method": "method", "Created At": "createdAt", "Last Update": "updatedAt"
 };
 
 const Details = ({ title, loading, data, detailKey, fields }) => {
@@ -38,6 +40,17 @@ const Details = ({ title, loading, data, detailKey, fields }) => {
   )
 };
 
+const RefundComp = ({ status, handler, loading }) => {
+  switch (status) {
+    case "refunded": return "Refunded"
+    case "pending": return "Refund Processing"
+    default:
+      return <Button onClick={handler}>
+        {loading ? <Spinner animation="border" size="sm" /> : "Click to Refund"}
+      </Button>
+  }
+}
+
 const ViewTransaction = () => {
   const { state } = useContext(Store);
   const { token } = state;
@@ -49,17 +62,22 @@ const ViewTransaction = () => {
     error: "",
   });
 
+  console.log({ transaction })
   useEffect(() => {
     (async () => {
       await getDetails(dispatch, token, id);
     })();
   }, [token, id]);
 
+  const refundHandler = async () => {
+    await refund(dispatch, token, id, { paypalID: transaction?.paypalID });
+  };
+
   useTitle("Transaction Details");
   return (
     <ViewCard
       title={"Transaction Details"}
-      data={transaction}
+      data={transaction && { ...transaction, warranty: transaction.warranty._id }}
       setModalShow={setModalShow}
       keyProps={keyProps}
       reducerProps={{ error, loading, dispatch }}
@@ -72,12 +90,20 @@ const ViewTransaction = () => {
         detailKey="user"
         fields={{ "Email": "email", "Firstname": "firstname", "Lastname": "lastname", "Mobile No.": "mobile_no" }}
       />
+
+      <u><h4 className="mt-3">Refund</h4></u>
+      {transaction?.warranty?.status === "inspection-failed"
+        ? <RefundComp status={transaction?.status} handler={refundHandler} loading={loading}/>
+        : <><Button disabled>Click to Refund</Button>
+          {/* <span>Warranty is not rejected.</span> */}
+        </>
+      }
       {/* <EditTransactionModel
         show={modalShow}
         onHide={() => setModalShow(false)}
       /> */}
       {!modalShow && <ToastContainer />}
-    </ViewCard>
+    </ViewCard >
   );
 };
 

@@ -148,7 +148,7 @@ export default function EditWarrantyModel(props) {
             required="true"
             label="Drive Type"
             name="drive_type"
-            options={[{ "4X4": "4X4" }, { "4X2": "4X2" }]}
+            options={[{ "4x4": "4x4" }, { "4x2": "4x2" }]}
             onChange={handleInput}
           />
         </Col>

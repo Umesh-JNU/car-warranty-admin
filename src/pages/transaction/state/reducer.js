@@ -37,7 +37,7 @@ export default function transactionReducer(state, action) {
 
     case "DELETE_SUCCESS":
       const deletedtransactionId = action.payload;
-      const updatedtransactions = state.transactions.filter(transaction => transaction.id !== deletedtransactionId);
+      const updatedtransactions = state.transactions.filter(transaction => transaction._id !== deletedtransactionId);
       const updatedtransactionsCount = state.transactionsCount - 1;
       return {
         ...state,

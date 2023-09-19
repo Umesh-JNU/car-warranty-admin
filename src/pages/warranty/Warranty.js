@@ -107,6 +107,7 @@ export default function Warranty() {
   const column = role === 'admin' ? [
     "S. No",
     "Client Name",
+    "Reg. No.",
     "Car Make",
     "Car Model",
     "Plan Type",
@@ -116,6 +117,7 @@ export default function Warranty() {
   ] : [
     "S.No",
     "Client Name",
+    "Reg. No.",
     "Plan",
     "Assigned Date",
     "Mobile No.",
@@ -168,6 +170,7 @@ export default function Warranty() {
                       <td className="text-center">{skip + i + 1}</td>
                       {role === 'admin' ? <>
                         <td>{`${warranty.user?.firstname} ${warranty.user?.lastname}`}</td>
+                        <td>{warranty.vehicleDetails?.reg_num}</td>
                         <td>{warranty.vehicleDetails?.make}</td>
                         <td>{warranty.vehicleDetails?.model}</td>
                         <td>{warranty.plan?.level?.level}</td>
@@ -180,6 +183,7 @@ export default function Warranty() {
                         </td>
                       </> : <>
                         <td>{`${warranty.user?.firstname} ${warranty.user?.lastname}`}</td>
+                        <td>{warranty.vehicleDetails?.reg_num}</td>
                         <td>{warranty.plan?.level?.level}</td>
                         <td>{warranty.createdAt.split('T')[0]}</td>
                         <td>{warranty.user?.mobile_no}</td>

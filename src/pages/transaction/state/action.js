@@ -85,3 +85,17 @@ export const getDetails = async (dispatch, token, id) => {
     });
   }
 };
+
+export const refund = async (dispatch, token, id, body) => {
+  try {
+    dispatch({ type: "FETCH_DETAILS_REQUEST" });
+    const { data } = await axiosInstance.post(`/api/admin/transaction/${id}/refund`,
+      body,
+      { headers: { Authorization: token } }
+    );
+    console.log("refund", data);
+    dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
+  } catch (error) {
+    dispatch({ type: "FETCH_DETAILS_FAIL", payload: getError(error) });
+  }
+}

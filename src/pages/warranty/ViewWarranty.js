@@ -106,7 +106,7 @@ const ViewWarranty = () => {
         loading={loading}
         data={warranty}
         detailKey="vehicleDetails"
-        fields={{ "Make": "make", "Model": "model", "BHP": "bhp", "DateFirstReg": "date_first_reg", "Drive Type": "drive_type", "Fuel Type": "fuel_type", "Engine Size": "size" }}
+        fields={{ "Registration No.": "reg_num", "Make": "make", "Model": "model", "BHP": "bhp", "DateFirstReg": "date_first_reg", "Drive Type": "drive_type", "Fuel Type": "fuel_type", "Engine Size": "size" }}
       />
       <Details
         title="User Details"
