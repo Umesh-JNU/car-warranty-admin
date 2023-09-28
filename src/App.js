@@ -32,12 +32,12 @@ function App() {
     { path: "/admin/view/enquiry/:id", comp: <ViewEnquiry /> }
   ];
 
-  const salePersonRouteList = [
-    { path: "/sale-person/dashboard", comp: <SaleDashboard /> },
-    { path: "/sale-person/view-profile", comp: <Profile /> },
-    { path: "/sale-person/tasks", comp: <Warranty /> },
-    { path: "/sale-person/view/task/:id", comp: <ViewWarranty /> },
-  ];
+  // const salePersonRouteList = [
+  //   { path: "/sale-person/dashboard", comp: <SaleDashboard /> },
+  //   { path: "/sale-person/view-profile", comp: <Profile /> },
+  //   { path: "/sale-person/tasks", comp: <Warranty /> },
+  //   { path: "/sale-person/view/task/:id", comp: <ViewWarranty /> },
+  // ];
 
   return (
     <div className="main-wrapper">
@@ -70,13 +70,13 @@ function App() {
             />
           ))}
 
-          {salePersonRouteList.map(({ path, comp }) => (
+          {/* {salePersonRouteList.map(({ path, comp }) => (
             <Route
               key={path}
               path={path}
               element={<SaleProtectedRoute>{comp}</SaleProtectedRoute>}
             />
-          ))}
+          ))} */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

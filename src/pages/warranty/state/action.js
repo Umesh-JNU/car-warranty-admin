@@ -18,8 +18,9 @@ export const create = async (dispatch, token, input) => {
   }
 };
 
-export const getAll = async (dispatch, token, curPage, resultPerPage, query, isSalePerson = false) => {
-  let url = `/api/${isSalePerson ? 'sale-person' : 'admin'}/warranty/?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
+export const getAll = async (dispatch, token, curPage, resultPerPage, query, status) => {
+  // let url = `/api/${isSalePerson ? 'sale-person' : 'admin'}/warranty/?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
+  let url = `/api/admin/warranty/?status=${status}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
   console.log({ url });
   try {
     dispatch({ type: "FETCH_REQUEST" });

@@ -19,7 +19,7 @@ import { toastOptions } from "../utils/error";
 import { clearErrors, login } from "../states/actions";
 
 export default function AdminLoginScreen() {
-  const [role, setRole] = useState("admin");
+  // const [role, setRole] = useState("admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -59,7 +59,7 @@ export default function AdminLoginScreen() {
         </Link>
       </div>
 
-      <div className="f-center mb-4">
+      {/* <div className="f-center mb-4">
         <div
           className={`toggle-link-item ${role === "admin" && 'active-link'}`}
           style={{ cursor: "pointer" }}
@@ -74,7 +74,7 @@ export default function AdminLoginScreen() {
         >
           Sale Person
         </div>
-      </div>
+      </div> */}
       <Card className="login-box">
         <Card.Body>
           <p className="text-center">Sign in to start your session</p>

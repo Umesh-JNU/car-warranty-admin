@@ -12,6 +12,7 @@ import MotionDiv from "./MotionDiv";
 import ViewCard from "./ViewCard";
 import { AddForm, EditForm, TextInput, CheckInput, RadioInput, SelectInput } from "./CustomForm";
 import SubmitButton from "./SubmitButton";
+import CountUp from "./CountUp";
 
 export {
   useTitle,
@@ -31,4 +32,5 @@ export {
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, RadioInput, SelectInput,
   SubmitButton,
+  CountUp,
 };

@@ -387,6 +387,7 @@ table.table {
 .graph-filter .form-check-input:checked {
   background-color: #009688;
   border-color: #009688;
+  margin-bottom: 1rem;
 }
 
 .toggle-link-item {

@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 import { clearErrors, clearSuccess } from "../../states/actions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { Card, Form, InputGroup, Spinner, Table } from 'react-bootstrap'
 import { ToastContainer, toast } from "react-toastify";
@@ -61,10 +61,14 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
 
 export default function Warranty() {
   const navigate = useNavigate();
+  const [searchParams, _] = useSearchParams(document.location.search);
+  const status = searchParams.get('status');
+  console.log({ status });
+
   const { state } = useContext(Store);
   const { userInfo, token } = state;
 
-  const [role, setRole] = useState(userInfo?.role);
+  // const [role, setRole] = useState(userInfo?.role);
   const [curPage, setCurPage] = useState(1);
   const [resultPerPage, setResultPerPage] = useState(10);
   const [searchInput, setSearchInput] = useState("");
@@ -87,11 +91,12 @@ export default function Warranty() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const isSalePerson = role === 'sale-person';
-      await getAll(dispatch, token, curPage, resultPerPage, searchInput, isSalePerson);
+      // const isSalePerson = role === 'sale-person';
+      // await getAll(dispatch, token, curPage, resultPerPage, searchInput, isSalePerson);
+      await getAll(dispatch, token, curPage, resultPerPage, searchInput, status);
     }
     fetchData();
-  }, [token, curPage, resultPerPage, searchInput]);
+  }, [token, curPage, resultPerPage, searchInput, status]);
 
   useEffect(() => {
     if (error) {
@@ -104,7 +109,28 @@ export default function Warranty() {
   const skip = resultPerPage * (curPage - 1);
   // console.log("nuofPage", numOfPages, resultPerPage);
 
-  const column = role === 'admin' ? [
+  // const column = role === 'admin' ? [
+  //   "S. No",
+  //   "Client Name",
+  //   "Reg. No.",
+  //   "Car Make",
+  //   "Car Model",
+  //   "Plan Type",
+  //   "Sale Person",
+  //   "Status",
+  //   "Actions"
+  // ] : [
+  //   "S.No",
+  //   "Client Name",
+  //   "Reg. No.",
+  //   "Plan",
+  //   "Assigned Date",
+  //   "Mobile No.",
+  //   "Status",
+  //   "Actions"
+  // ];
+
+  const column = [
     "S. No",
     "Client Name",
     "Reg. No.",
@@ -114,18 +140,10 @@ export default function Warranty() {
     "Sale Person",
     "Status",
     "Actions"
-  ] : [
-    "S.No",
-    "Client Name",
-    "Reg. No.",
-    "Plan",
-    "Assigned Date",
-    "Mobile No.",
-    "Status",
-    "Actions"
   ];
 
-  useTitle(role === 'admin' ? "Warranty Table" : "My Tasks");
+  // useTitle(role === 'admin' ? "Warranty Table" : "My Tasks");
+  useTitle("All Tasks");
   return (
     <MotionDiv>
       {error ? (
@@ -168,37 +186,18 @@ export default function Warranty() {
                   warranties.map((warranty, i) => (
                     <tr key={warranty._id} className="odd">
                       <td className="text-center">{skip + i + 1}</td>
-                      {role === 'admin' ? <>
-                        <td>{`${warranty.user?.firstname} ${warranty.user?.lastname}`}</td>
-                        <td>{warranty.vehicleDetails?.reg_num}</td>
-                        <td>{warranty.vehicleDetails?.make}</td>
-                        <td>{warranty.vehicleDetails?.model}</td>
-                        <td>{warranty.plan?.level?.level}</td>
-                        <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td>
-                        <td>{warranty.status}</td>
-                        <td>
-                          <AssignButton onClick={() => { setShow(true); setWarrantyID(warranty._id); }} />
-                          <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} />
-                          <DeleteButton onClick={() => deleteWarranty(warranty._id)} />
-                        </td>
-                      </> : <>
-                        <td>{`${warranty.user?.firstname} ${warranty.user?.lastname}`}</td>
-                        <td>{warranty.vehicleDetails?.reg_num}</td>
-                        <td>{warranty.plan?.level?.level}</td>
-                        <td>{warranty.createdAt.split('T')[0]}</td>
-                        <td>{warranty.user?.mobile_no}</td>
-                        <td>
-                          <ChangeStatus
-                            status={warranty.status}
-                            warrantyId={warranty._id}
-                            token={token}
-                            success={success} loading={loadingUpdate} dispatch={dispatch}
-                          />
-                        </td>
-                        <td>
-                          <ViewButton onClick={() => navigate(`/sale-person/view/task/${warranty._id}`)} />
-                        </td>
-                      </>}
+                      <td>{`${warranty.user?.firstname} ${warranty.user?.lastname}`}</td>
+                      <td>{warranty.vehicleDetails?.reg_num}</td>
+                      <td>{warranty.vehicleDetails?.make}</td>
+                      <td>{warranty.vehicleDetails?.model}</td>
+                      <td>{warranty.plan?.level?.level}</td>
+                      <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td>
+                      <td>{warranty.status}</td>
+                      <td>
+                        <AssignButton onClick={() => { setShow(true); setWarrantyID(warranty._id); }} />
+                        <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} />
+                        <DeleteButton onClick={() => deleteWarranty(warranty._id)} />
+                      </td>
                     </tr>
                   ))
                 )}
@@ -235,7 +234,7 @@ export default function Warranty() {
 
       )}
 
-      {
+      {/* {
         role === 'admin' && <SalePersonModal
           show={show}
           handleClose={() => setShow(false)}
@@ -243,7 +242,7 @@ export default function Warranty() {
           token={token}
           success={success} loading={loadingUpdate} dispatch={dispatch}
         />
-      }
+      } */}
       {!show && <ToastContainer />}
     </MotionDiv >
   );

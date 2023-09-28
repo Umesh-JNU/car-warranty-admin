@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
-import { Form, Container, Card, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import { Store } from "../states/store";
 // icons
-import { BiSolidShieldX } from "react-icons/bi";
-import { HiShieldCheck } from "react-icons/hi";
-import { GiNetworkBars } from "react-icons/gi";
+import { MdContactPhone } from "react-icons/md";
+import { BsShieldFillPlus } from "react-icons/bs";
 import { FaArrowCircleRight } from "react-icons/fa";
-import { IoIosPerson, IoIosPersonAdd, IoMdPie } from "react-icons/io";
+import { BiSolidShieldMinus, BiSolidShieldX } from "react-icons/bi";
+import { HiShieldCheck, HiShieldExclamation } from "react-icons/hi";
 
-import Chart from "react-google-charts";
+
 import Skeleton from "react-loading-skeleton";
 import axiosInstance from "../utils/axiosUtil";
 import { getError } from "../utils/error";
-import { MotionDiv, MessageBox } from "../components";
+import { MotionDiv, MessageBox, CountUp } from "../components";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,6 +33,78 @@ const reducer = (state, action) => {
   }
 };
 
+
+const card = [
+  {
+    key: "awaited",
+    bg: "primary",
+    icon: <BsShieldFillPlus />,
+    text: "Awaited Warranties",
+    url: "/admin/warranty/?status=AWAITED"
+  },
+  {
+    key: "active",
+    bg: "success",
+    icon: <BiSolidShieldX />,
+    text: "Active Warranties",
+    url: "/admin/warranty/?status=ACTIVE"
+  },
+  {
+    key: "rejected",
+    bg: "danger",
+    icon: <HiShieldCheck />,
+    text: "Rejected Warranties",
+    url: "/admin/warranty/?status=REJECTED"
+  },
+  {
+    key: "toExpired",
+    bg: "warning",
+    icon: <HiShieldExclamation />,
+    text: "Expired Warranties In 30 Days",
+    url: "/admin/warranty/?status=TO-BE-EXPIRED"
+  },
+  {
+    key: "expired",
+    bg: "danger",
+    icon: <BiSolidShieldMinus />,
+    text: "Expired Warranties",
+    url: "/admin/warranty/?status=EXPIRED"
+  },
+  {
+    key: "enquiry",
+    bg: "info",
+    icon: <MdContactPhone />,
+    text: "Enquiry",
+    url: "/admin/enquiry"
+  }
+];
+
+const ViewCard = ({ loading, data, bg, icon, text, url }) => {
+  return (
+    <div>
+      {loading ? (
+        <Skeleton count={5} />
+      ) : (
+        <div className={`small-box bg-${bg}`}>
+          <div className="inner p-sm-1 p-md-2 p-lg-3">
+            <CountUp start={0} end={data} duration={2} />
+            {/* <h1>
+              {data && data[0] ? data[0].total : 0}
+            </h1> */}
+            <h5>{text}</h5>
+          </div>
+          <div className="icon">
+            {icon}
+          </div>
+          <Link to={url} className="small-box-footer">
+            More info {<FaArrowCircleRight />}
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -40,39 +112,13 @@ export default function Dashboard() {
   });
   const { state } = useContext(Store);
   const { token } = state;
-  const [time, setTime] = useState("month");
-
-  const monthlySales = (data) => {
-    const months = [
-      ['Jan', 0],
-      ['Feb', 0],
-      ['Mar', 0],
-      ['Apr', 0],
-      ['May', 0],
-      ['Jun', 0],
-      ['Jul', 0],
-      ['Aug', 0],
-      ['Sept', 0],
-      ['Oct', 0],
-      ['Nov', 0],
-      ['Dec', 0],
-    ];
-
-    data.forEach((x) => {
-      console.log({ x });
-      if (x.month) months[x.month - 1][1] = x.totalSales;
-    });
-    console.log({ months });
-    return months;
-  };
 
   useEffect(() => {
-    console.log({ time });
     (async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axiosInstance.get(
-          `/api/admin/statistics/${time}`,
+          `/api/admin/summary`,
           {
             headers: { Authorization: token },
           }
@@ -89,7 +135,7 @@ export default function Dashboard() {
         });
       }
     })();
-  }, [token, time]);
+  }, [token]);
 
   return (
     <MotionDiv>
@@ -102,173 +148,17 @@ export default function Dashboard() {
             style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
           >
             <Col md={6}>
-              <h3>Dashboard</h3>
+              <h3>Active Sale Tasks</h3>
             </Col>
-            <Col md={6}>
-              {/* <div className="float-md-end d-flex align-items-center">
-                <p className="p-bold m-0 me-3">Statistics For</p>
-                <Form.Group controlId="time">
-                  <Form.Select
-                    value={time}
-                    onChange={(e) => {
-                      setTime(e.target.value);
-                    }}
-                    aria-label="Default select example"
-                  >
-                    <option key="blankChoice" hidden value>
-                      Select Time
-                    </option>
-                    <option value="all">All Time Statistics</option>
-                    <option value="daily">Daily Statistics</option>
-                    <option value="weekly">Weekly Statistics</option>
-                    <option value="monthly">Monthly Statistics</option>
-                  </Form.Select>
-                </Form.Group>
-              </div> */}
-            </Col>
+            <Col md={6}></Col>
           </Row>
 
-          <Row className="mb-3">
-            <Col lg={4} sm={6}>
-              {loading ? (
-                <Skeleton count={5} />
-              ) : (
-                <div className="small-box bg-info">
-                  <div className="inner">
-                    <h3>
-                      {summary.users && summary.users[0]
-                        ? summary.users[0].total
-                        : 0}
-                    </h3>
-                    <p>Users</p>
-                  </div>
-                  <div className="icon">
-                    <IoIosPersonAdd />
-                  </div>
-                  <Link to="/admin/users" className="small-box-footer">
-                    More info {<FaArrowCircleRight />}
-                  </Link>
-                </div>
-              )}
-            </Col>
-            <Col lg={4} sm={6}>
-              {loading ? (
-                <Skeleton count={5} />
-              ) : (
-                <div className="small-box bg-success">
-                  <div className="inner">
-                    <h3>
-                      {summary.rejected && summary.rejected[0]
-                        ? summary.rejected[0].total
-                        : 0}
-                      <sup style={{ fontSize: 20 }}></sup>
-                    </h3>
-                    <p>Rejected Warranties</p>
-                  </div>
-                  <div className="icon">
-                    <BiSolidShieldX />
-                  </div>
-                  <Link to="/admin/warranty" className="small-box-footer">
-                    More info {<FaArrowCircleRight />}
-                  </Link>
-                </div>
-              )}
-            </Col>
-            <Col lg={4} sm={6}>
-              {loading ? (
-                <Skeleton count={5} />
-              ) : (
-                <div className="small-box bg-warning">
-                  <div className="inner">
-                    <h3>
-                      {summary.passed && summary.passed[0]
-                        ? summary.passed[0].total
-                        : 0}
-                    </h3>
-                    <p>Passed Warranties</p>
-                  </div>
-                  <div className="icon">
-                    <HiShieldCheck />
-                  </div>
-                  <Link to="/admin/warranty" className="small-box-footer">
-                    More info {<FaArrowCircleRight />}
-                  </Link>
-                </div>
-              )}
-            </Col>
-          </Row>
-
-          <Row className="my-4">
-            <Col sm={9}>
-              <Card className="mb-3">
-                <Card.Header className="card-header-primary">
-                  Sales Report
-                </Card.Header>
-                <Card.Body>
-                  {loading ? (
-                    <Skeleton count={5} height={30} />
-                  ) : summary.sales.length === 0 ? (
-                    <MessageBox>No Sales</MessageBox>
-                  ) : (
-                    <>
-                      {time === "month" ?
-                        <Chart
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { title: "Weeks" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Weeks", "Total Sales"],
-                            ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
-                          ]}
-                        ></Chart> :
-                        <Chart
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Month", "Total Sales"],
-                            ...monthlySales(summary.sales)
-                          ]}
-                        ></Chart>
-                      }
-                      <div className="f-center graph-filter">
-                        <Form.Group>
-                          <Form.Check
-                            inline
-                            label="Month"
-                            type="radio"
-                            checked={time === "month"}
-                            // name="filterOption"
-                            // value="month"
-                            onChange={(e) => { e.preventDefault(); setTime("month"); }}
-                          />
-
-                          <Form.Check
-                            inline
-                            label="Year"
-                            type="radio"
-                            checked={time === "year"}
-                            // name="filterOption"
-                            // value="year"
-                            onChange={(e) => { e.preventDefault(); setTime("year"); }}
-                          />
-                        </Form.Group>
-                      </div>
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
+          <Row className="m-0 mb-3">
+            {card.map(({ key, bg, icon, text, url }) => (
+              <Col key={url} lg={4} md={6} sm={12} className="p-sm-1 p-md-2 p-lg-3">
+                <ViewCard loading={loading} data={summary && summary[key]} bg={bg} icon={icon} text={text} url={url} />
+              </Col>
+            ))}
           </Row>
           <ToastContainer />
         </>

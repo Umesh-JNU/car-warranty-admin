@@ -5,26 +5,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { HiUsers } from "react-icons/hi";
 import { RiDashboard2Fill } from "react-icons/ri";
 import { FaShieldAlt, FaSignOutAlt, FaTasks } from "react-icons/fa";
-import { MdContactPhone } from "react-icons/md";
+import { MdContactPhone, MdOutlineInsights, MdOutlineSwapHoriz } from "react-icons/md";
+import { TbArrowsExchange } from "react-icons/tb";
 import { BsListCheck, BsPersonLinesFill } from 'react-icons/bs';
 import { SiLevelsdotfyi } from 'react-icons/si';
 import { GrTransaction } from 'react-icons/gr';
 
 const adminList = [
-  { icon: <RiDashboard2Fill className="icon-md" />, text: "Dashboard", url: "/admin/dashboard" },
-  { icon: <HiUsers className="icon-md" />, text: "Users", url: "/admin/users" },
-  { icon: <FaShieldAlt className="icon-md" />, text: "Warranty", url: "/admin/warranty" },
-  { icon: <BsPersonLinesFill className="icon-md" />, text: "Sale Persons", url: "/admin/sale-person" },
-  { icon: <GrTransaction className="icon-md" />, text: "Transaction", url: "/admin/transactions" },
-  { icon: <MdContactPhone className="icon-md" />, text: "Enquiry", url: "/admin/enquiry" },
+  { icon: <RiDashboard2Fill className="icon-md" />, text: "Active Sales Tasks", url: "/admin/dashboard" },
+  { icon: <MdOutlineInsights className="icon-md" />, text: "Sales Insights", url: "/admin/users" },
+  { icon: <FaShieldAlt className="icon-md" />, text: "Leads", url: "/admin/warranty" },
+  // { icon: <BsPersonLinesFill className="icon-md" />, text: "Sale Persons", url: "/admin/sale-person" },
+  { icon: <TbArrowsExchange className="icon-md big" />, text: "Transaction", url: "/admin/transactions" },
+  // { icon: <MdContactPhone className="icon-md" />, text: "Enquiry", url: "/admin/enquiry" },
   // { icon: <SiLevelsdotfyi className="icon-md" />, text: "Level", url: "/admin/levels" },
   // { icon: <BsListCheck className="icon-md" />, text: "Plan", url: "/admin/plans" },
 ];
 
-const spList = [
-  { icon: <RiDashboard2Fill className="icon-md" />, text: "Dashboard", url: "/sale-person/dashboard" },
-  { icon: <FaTasks className="icon-md" />, text: "Tasks", url: "/sale-person/tasks" },
-];
+// const spList = [
+//   { icon: <RiDashboard2Fill className="icon-md" />, text: "Dashboard", url: "/sale-person/dashboard" },
+//   { icon: <FaTasks className="icon-md" />, text: "Tasks", url: "/sale-person/tasks" },
+// ];
 
 const active_text = {
   Dashboard: "dashboard",
@@ -126,7 +127,7 @@ export default function SideNavbar({ isExpanded }) {
                   </li>
                 ))}
 
-                {userInfo.role === 'sale-person' && spList.map(({ icon, text, url }) => (
+                {/* {userInfo.role === 'sale-person' && spList.map(({ icon, text, url }) => (
                   <li
                     key={url}
                     className={`${cls} ${activeLinkHandler(text) && "active-item"
@@ -138,7 +139,7 @@ export default function SideNavbar({ isExpanded }) {
                       <p className="ms-2">{text}</p>
                     </Link>
                   </li>
-                ))}
+                ))} */}
 
                 <li className={cls}>
                   <Link onClick={signoutHandler} to="/" className="nav-link">

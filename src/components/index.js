@@ -17,6 +17,7 @@ import {
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, RadioInput, SelectInput,
   SubmitButton,
+  CountUp, 
 } from "./layout";
 
 import ArrayView from "./listView/ArrayView";
@@ -42,5 +43,6 @@ export {
   AutocompleteSearch,
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, RadioInput, SelectInput,
-  SubmitButton
+  SubmitButton,
+  CountUp,
 };
