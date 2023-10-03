@@ -72,7 +72,8 @@ export const update = async (dispatch, token, id, warrantyInfo, isSalePerson = f
 
 export const updateStatus = async (dispatch, token, id, warrantyInfo) => {
   console.log({ warrantyInfo });
-  const url = `/api/sale-person/warranty/${id}`;
+  // const url = `/api/sale-person/warranty/${id}`;
+  const url = `/api/admin/warranty/${id}`;
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 

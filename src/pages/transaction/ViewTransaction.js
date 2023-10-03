@@ -69,9 +69,9 @@ const ViewTransaction = () => {
     })();
   }, [token, id]);
 
-  const refundHandler = async () => {
-    await refund(dispatch, token, id, { paypalID: transaction?.paypalID });
-  };
+  // const refundHandler = async () => {
+  //   await refund(dispatch, token, id, { paypalID: transaction?.paypalID });
+  // };
 
   useTitle("Transaction Details");
   return (
@@ -91,13 +91,13 @@ const ViewTransaction = () => {
         fields={{ "Email": "email", "Firstname": "firstname", "Lastname": "lastname", "Mobile No.": "mobile_no" }}
       />
 
-      <u><h4 className="mt-3">Refund</h4></u>
+      {/* <u><h4 className="mt-3">Refund</h4></u>
       {transaction?.warranty?.status === "inspection-failed"
         ? <RefundComp status={transaction?.status} handler={refundHandler} loading={loading}/>
         : <><Button disabled>Click to Refund</Button>
-          {/* <span>Warranty is not rejected.</span> */}
+          // <span>Warranty is not rejected.</span>
         </>
-      }
+      } */}
       {/* <EditTransactionModel
         show={modalShow}
         onHide={() => setModalShow(false)}

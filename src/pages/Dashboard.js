@@ -86,12 +86,17 @@ const ViewCard = ({ loading, data, bg, icon, text, url }) => {
         <Skeleton count={5} />
       ) : (
         <div className={`small-box bg-${bg}`}>
-          <div className="inner p-sm-1 p-md-2 p-lg-3">
+          {/* <div className="inner p-sm-1 p-md-2 p-lg-3"> */}
+          <div className="inner">
             <CountUp start={0} end={data} duration={2} />
             {/* <h1>
               {data && data[0] ? data[0].total : 0}
             </h1> */}
-            <h5>{text}</h5>
+            <h5 style={{
+              overflow: 'hidden',
+              whiteSpace: 'nowrap', 
+              textOverflow: 'ellipsis'
+            }}>{text}</h5>
           </div>
           <div className="icon">
             {icon}

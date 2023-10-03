@@ -39,11 +39,12 @@ export default function AdminLoginScreen() {
   };
 
   useEffect(() => {
-    if (token) {
-      // setTimeout(() => {
-      navigate(userInfo.role === 'admin' ? "/admin/dashboard" : "/sale-person/dashboard");
-      // }, 1000);
-    }
+    // if (token) {
+    //   // setTimeout(() => {
+    //   // navigate(userInfo.role === 'admin' ? "/admin/dashboard" : "/sale-person/dashboard");
+    //   navigate("/admin/active-sale-tasks");
+    //   // }, 1000);
+    // }
     if (error) {
       toast.error(error, toastOptions);
       clearErrors(dispatch);

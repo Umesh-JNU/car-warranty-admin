@@ -102,197 +102,155 @@ export default function Dashboard() {
             style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
           >
             <Col md={6}>
-              <h3>Dashboard</h3>
+              <h3>InSights</h3>
             </Col>
-            <Col md={6}>
-              {/* <div className="float-md-end d-flex align-items-center">
-                <p className="p-bold m-0 me-3">Statistics For</p>
-                <Form.Group controlId="time">
-                  <Form.Select
-                    value={time}
-                    onChange={(e) => {
-                      setTime(e.target.value);
-                    }}
-                    aria-label="Default select example"
-                  >
-                    <option key="blankChoice" hidden value>
-                      Select Time
-                    </option>
-                    <option value="all">All Time Statistics</option>
-                    <option value="daily">Daily Statistics</option>
-                    <option value="weekly">Weekly Statistics</option>
-                    <option value="monthly">Monthly Statistics</option>
-                  </Form.Select>
-                </Form.Group>
-              </div> */}
-            </Col>
+            <Col md={6}></Col>
           </Row>
 
-          <Row className="m-0 mb-3">
-            <Col lg={3} md={4} sm={5} xs={12}>
-              <div>
-                {loading ? (
-                  <Skeleton count={5} />
-                ) : (
-                  <div className="small-box bg-info">
-                    <div className="inner">
-                      <h3>
-                        {summary.users && summary.users[0]
-                          ? summary.users[0].total
-                          : 0}
-                      </h3>
-                      <p>Users</p>
-                    </div>
-                    <div className="icon">
-                      <IoIosPersonAdd />
-                    </div>
-                    <Link to="/admin/users" className="small-box-footer">
-                      More info {<FaArrowCircleRight />}
-                    </Link>
-                  </div>
-                )}
-              </div>
-              <div>
-                {loading ? (
-                  <Skeleton count={5} />
-                ) : (
-                  <div className="small-box bg-warning">
-                    <div className="inner">
-                      <h3>
-                        {summary.pending && summary.pending[0]
-                          ? summary.pending[0].total
-                          : 0}
-                      </h3>
-                      <p>Pending Warranties</p>
-                    </div>
-                    <div className="icon">
-                      <HiShieldExclamation />
-                    </div>
-                    <Link to="/admin/warranty" className="small-box-footer">
-                      More info {<FaArrowCircleRight />}
-                    </Link>
-                  </div>
-                )}
-              </div>
-              <div>
-                {loading ? (
-                  <Skeleton count={5} />
-                ) : (
-                  <div className="small-box bg-success">
-                    <div className="inner">
-                      <h3>
-                        {summary.passed && summary.passed[0]
-                          ? summary.passed[0].total
-                          : 0}
-                      </h3>
-                      <p>Passed Warranties</p>
-                    </div>
-                    <div className="icon">
-                      <HiShieldCheck />
-                    </div>
-                    <Link to="/admin/warranty" className="small-box-footer">
-                      More info {<FaArrowCircleRight />}
-                    </Link>
-                  </div>
-                )}
-              </div>
-              <div>
-                {loading ? (
-                  <Skeleton count={5} />
-                ) : (
-                  <div className="small-box bg-danger">
-                    <div className="inner">
-                      <h3>
-                        {summary.rejected && summary.rejected[0]
-                          ? summary.rejected[0].total
-                          : 0}
-                        <sup style={{ fontSize: 20 }}></sup>
-                      </h3>
-                      <p>Rejected Warranties</p>
-                    </div>
-                    <div className="icon">
-                      <BiSolidShieldX />
-                    </div>
-                    <Link to="/admin/warranty" className="small-box-footer">
-                      More info {<FaArrowCircleRight />}
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </Col>
-            <Col lg={9} md={8} sm={7} xs={12}>
-              <Card className="mb-3">
-                <Card.Header className="card-header-primary">
-                  Sales Report
-                </Card.Header>
-                <Card.Body className="p-0">
-                  {loading ? (
-                    <Skeleton count={5} height={30} />
-                  ) : summary.sales.length === 0 ? (
-                    <MessageBox>No Sales</MessageBox>
-                  ) : (
-                    <>
-                      {time === "month" ?
-                        <Chart
-                          style={{ overflow: "hidden" }}
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { title: "Weeks" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Weeks", "Total Sales"],
-                            ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
-                          ]}
-                        ></Chart> :
-                        <Chart
-                          style={{ overflow: "hidden", top: 0 }}
-                          width="100%"
-                          height="400px"
-                          chartType="ColumnChart"
-                          options={{
-                            hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                            vAxis: { title: "Total Sales" }, // Y-axis label
-                            colors: ["#00ab41"],
-                          }}
-                          data={[
-                            ["Month", "Total Sales"],
-                            ...monthlySales(summary.sales)
-                          ]}
-                        ></Chart>
-                      }
-                      <div className="f-center graph-filter">
-                        <Form.Group>
-                          <Form.Check
-                            inline
-                            label="Month"
-                            type="radio"
-                            checked={time === "month"}
-                            // name="filterOption"
-                            // value="month"
-                            onChange={(e) => { e.preventDefault(); setTime("month"); }}
-                          />
+          <Container className="container-md">
 
-                          <Form.Check
-                            inline
-                            label="Year"
-                            type="radio"
-                            checked={time === "year"}
-                            // name="filterOption"
-                            // value="year"
-                            onChange={(e) => { e.preventDefault(); setTime("year"); }}
-                          />
-                        </Form.Group>
-                      </div>
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+            <Card className="mb-3">
+              <Card.Header className="card-header-primary">
+                Sales Report
+              </Card.Header>
+              <Card.Body className="p-0">
+                {loading ? (
+                  <Skeleton count={5} height={30} />
+                ) : summary.sales.length === 0 ? (
+                  <MessageBox>No Sales</MessageBox>
+                ) : (
+                  <>
+                    {time === "month" ?
+                      <Chart
+                        style={{ overflow: "hidden" }}
+                        width="100%"
+                        height="400px"
+                        chartType="ColumnChart"
+                        options={{
+                          hAxis: { title: "Weeks" }, // X-axis label
+                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          colors: ["#00ab41"],
+                        }}
+                        data={[
+                          ["Weeks", "Total Sales"],
+                          ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
+                        ]}
+                      ></Chart> :
+                      <Chart
+                        style={{ overflow: "hidden", top: 0 }}
+                        width="100%"
+                        height="400px"
+                        chartType="ColumnChart"
+                        options={{
+                          hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
+                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          colors: ["#00ab41"],
+                        }}
+                        data={[
+                          ["Month", "Total Sales"],
+                          ...monthlySales(summary.sales)
+                        ]}
+                      ></Chart>
+                    }
+                    <div className="f-center graph-filter">
+                      <Form.Group>
+                        <Form.Check
+                          inline
+                          label="Month"
+                          type="radio"
+                          checked={time === "month"}
+                          // name="filterOption"
+                          // value="month"
+                          onChange={(e) => { e.preventDefault(); setTime("month"); }}
+                        />
+
+                        <Form.Check
+                          inline
+                          label="Year"
+                          type="radio"
+                          checked={time === "year"}
+                          // name="filterOption"
+                          // value="year"
+                          onChange={(e) => { e.preventDefault(); setTime("year"); }}
+                        />
+                      </Form.Group>
+                    </div>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+            <Card className="mb-3">
+              <Card.Header className="card-header-primary">
+                Refund Report
+              </Card.Header>
+              <Card.Body className="p-0">
+                {loading ? (
+                  <Skeleton count={5} height={30} />
+                ) : summary.sales.length === 0 ? (
+                  <MessageBox>No Refund</MessageBox>
+                ) : (
+                  <>
+                    {time === "month" ?
+                      <Chart
+                        style={{ overflow: "hidden" }}
+                        width="100%"
+                        height="400px"
+                        chartType="ColumnChart"
+                        options={{
+                          hAxis: { title: "Weeks" }, // X-axis label
+                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          colors: ["#00ab41"],
+                        }}
+                        data={[
+                          ["Weeks", "Total Sales"],
+                          ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
+                        ]}
+                      ></Chart> :
+                      <Chart
+                        style={{ overflow: "hidden", top: 0 }}
+                        width="100%"
+                        height="400px"
+                        chartType="ColumnChart"
+                        options={{
+                          hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
+                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          colors: ["#00ab41"],
+                        }}
+                        data={[
+                          ["Month", "Total Sales"],
+                          ...monthlySales(summary.sales)
+                        ]}
+                      ></Chart>
+                    }
+                    <div className="f-center graph-filter">
+                      <Form.Group>
+                        <Form.Check
+                          inline
+                          label="Month"
+                          type="radio"
+                          checked={time === "month"}
+                          // name="filterOption"
+                          // value="month"
+                          onChange={(e) => { e.preventDefault(); setTime("month"); }}
+                        />
+
+                        <Form.Check
+                          inline
+                          label="Year"
+                          type="radio"
+                          checked={time === "year"}
+                          // name="filterOption"
+                          // value="year"
+                          onChange={(e) => { e.preventDefault(); setTime("year"); }}
+                        />
+                      </Form.Group>
+                    </div>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          </Container>
+
           <ToastContainer />
         </>
       )}

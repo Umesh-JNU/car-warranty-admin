@@ -19,9 +19,17 @@ import {
   CustomSkeleton,
 } from "../../components";
 import reducer from "./state/reducer";
-import { getAll, del, updateStatus } from "./state/action";
+import { getAll, del, updateStatus, update } from "./state/action";
 import { toastOptions } from "../../utils/error";
 import SalePersonModal from "./SalePersonModal";
+
+const statusObj = {
+  'AWAITED': 'Awaited',
+  'ACTIVE': 'Active',
+  'REJECTED': 'Rejected',
+  'TO-BE-EXPIRED': 'To-be-expired',
+  'EXPIRED': 'Expired',
+};
 
 const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
   // const [value, setValue] = useState(status);
@@ -30,7 +38,7 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
   const handleStatus = async (e) => {
     e.preventDefault();
     setLoadingUpdate(true);
-    await updateStatus(dispatch, token, warrantyId, { status: e.target.value }, true);
+    await updateStatus(dispatch, token, warrantyId, { status: e.target.value });
     setTimeout(() => {
       setLoadingUpdate(false);
     }, 2000);
@@ -46,6 +54,7 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
           { "inspection-passed": "Inspection Passed" },
           { "order-placed": "Order Placed" },
           { "doc-delivered": "Document Delivered" },
+          { "refunded": "Refunded" },
           // { "claim-requested": "Claim Requested" },
           // { "claim-inspection": "Claim Inspection" },
           // { "claim-inspection-failed": "Claim Inspection Failed" },
@@ -137,7 +146,7 @@ export default function Warranty() {
     "Car Make",
     "Car Model",
     "Plan Type",
-    "Sale Person",
+    // "Sale Person",
     "Status",
     "Actions"
   ];
@@ -171,7 +180,7 @@ export default function Warranty() {
                 </Form.Select>
               </Form.Group>
             </div>
-            <h3 className="mb-0">Warranties</h3>
+            <h3 className="mb-0">{`${statusObj[status]} Warranties`}</h3>
           </Card.Header>
           <Card.Body>
             <Table responsive striped bordered hover>
@@ -191,11 +200,21 @@ export default function Warranty() {
                       <td>{warranty.vehicleDetails?.make}</td>
                       <td>{warranty.vehicleDetails?.model}</td>
                       <td>{warranty.plan?.level?.level}</td>
-                      <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td>
-                      <td>{warranty.status}</td>
+                      {/* <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td> */}
                       <td>
-                        <AssignButton onClick={() => { setShow(true); setWarrantyID(warranty._id); }} />
-                        <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} />
+                        <ChangeStatus
+                          status={warranty.status}
+                          warrantyId={warranty._id}
+                          token={token}
+                          success={success}
+                          loading={loadingUpdate}
+                          dispatch={dispatch}
+                        />
+                      </td>
+                      {/* <td>{warranty.status}</td> */}
+                      <td>
+                        {/* <AssignButton onClick={() => { setShow(true); setWarrantyID(warranty._id); }} /> */}
+                        {/* <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} /> */}
                         <DeleteButton onClick={() => deleteWarranty(warranty._id)} />
                       </td>
                     </tr>

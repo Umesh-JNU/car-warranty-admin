@@ -4,7 +4,7 @@ import { Store } from "./states/store";
 
 import { AdminProtectedRoute, SaleProtectedRoute, UnprotectedRoute } from "./routes";
 import { Header, Footer, SideNavBar, NotFound } from "./components";
-import { AdminLoginScreen, Dashboard, Profile, SaleDashboard, Users, ViewUser, Warranty, ViewWarranty, SalePerson, AddSalePerson, ViewSalePerson, Transactions, ViewTransaction, Enquiry, AddEnquiry, ViewEnquiry } from "./pages";
+import { AdminLoginScreen, Dashboard, Profile, InSight, SaleDashboard, Users, ViewUser, Warranty, ViewWarranty, SalePerson, AddSalePerson, ViewSalePerson, Transactions, ViewTransaction, Enquiry, AddEnquiry, ViewEnquiry } from "./pages";
 
 function App() {
   const { state } = useContext(Store);
@@ -16,15 +16,16 @@ function App() {
   const sidebarHandler = () => setExpandState((prev) => !prev);
 
   const routeList = [
-    { path: "/admin/dashboard", comp: <Dashboard /> },
     { path: "/admin/view-profile", comp: <Profile /> },
-    { path: "/admin/users", comp: <Users /> },
-    { path: "/admin/view/user/:id", comp: <ViewUser /> },
+    { path: "/admin/active-sale-tasks", comp: <Dashboard /> },
+    { path: "/admin/sale-insights", comp: <InSight /> },
+    { path: "/admin/leads", comp: <Users /> },
+    // { path: "/admin/view/user/:id", comp: <ViewUser /> },
     { path: "/admin/warranty", comp: <Warranty /> },
-    { path: "/admin/view/warranty/:id", comp: <ViewWarranty /> },
-    { path: "/admin/sale-person", comp: <SalePerson /> },
-    { path: "/admin/sale-person/create", comp: <AddSalePerson /> },
-    { path: "/admin/view/sale-person/:id", comp: <ViewSalePerson /> },
+    // { path: "/admin/view/warranty/:id", comp: <ViewWarranty /> },
+    // { path: "/admin/sale-person", comp: <SalePerson /> },
+    // { path: "/admin/sale-person/create", comp: <AddSalePerson /> },
+    // { path: "/admin/view/sale-person/:id", comp: <ViewSalePerson /> },
     { path: "/admin/transactions", comp: <Transactions /> },
     { path: "/admin/view/transaction/:id", comp: <ViewTransaction /> },
     { path: "/admin/enquiry", comp: <Enquiry /> },

@@ -19,7 +19,7 @@ export const create = async (dispatch, token, input) => {
 };
 
 export const getAll = async (dispatch, token, curPage, resultPerPage, query) => {
-  let url = `/api/admin/users/?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
+  let url = `/api/admin/leads/?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
 
   try {
     dispatch({ type: "FETCH_REQUEST" });

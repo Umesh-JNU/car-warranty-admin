@@ -63,8 +63,9 @@ export default function Users() {
 		"Firstname",
 		"Lastname",
 		"Mobile No.",
-		"Role",
-    "Actions"
+    "Status"
+		// "Role",
+    // "Actions"
   ];
 
   useTitle("Users");
@@ -94,13 +95,14 @@ export default function Users() {
 								<td>{user.firstname}</td>
 								<td>{user.lastname}</td>
 								<td>{user.mobile_no}</td>
-								<td>{user.role}</td>
+								<td>{user.status}</td>
+								{/* <td>{user.role}</td>
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/user/${user._id}`)}
                   />
                   <DeleteButton onClick={() => deleteUser(user._id)} />
-                </td>
+                </td> */}
               </tr>
             ))}
         </CustomTable>

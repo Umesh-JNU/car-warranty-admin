@@ -12,7 +12,10 @@ export default function userReducer(state, action) {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        users: action.payload.users,
+        users: action.payload.leads.map((data) => {
+          console.log("in reducer", { data })
+          return { ...data.user, status: data.status };
+        }),
         usersCount: action.payload.usersCount,
         loading: false,
       };

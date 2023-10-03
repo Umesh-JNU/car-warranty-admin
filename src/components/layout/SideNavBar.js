@@ -12,9 +12,9 @@ import { SiLevelsdotfyi } from 'react-icons/si';
 import { GrTransaction } from 'react-icons/gr';
 
 const adminList = [
-  { icon: <RiDashboard2Fill className="icon-md" />, text: "Active Sales Tasks", url: "/admin/dashboard" },
-  { icon: <MdOutlineInsights className="icon-md" />, text: "Sales Insights", url: "/admin/users" },
-  { icon: <FaShieldAlt className="icon-md" />, text: "Leads", url: "/admin/warranty" },
+  { icon: <RiDashboard2Fill className="icon-md" />, text: "Active Sales Tasks", url: "/admin/active-sale-tasks" },
+  { icon: <MdOutlineInsights className="icon-md" />, text: "Sale Insights", url: "/admin/sale-insights" },
+  { icon: <FaShieldAlt className="icon-md" />, text: "Leads", url: "/admin/leads" },
   // { icon: <BsPersonLinesFill className="icon-md" />, text: "Sale Persons", url: "/admin/sale-person" },
   { icon: <TbArrowsExchange className="icon-md big" />, text: "Transaction", url: "/admin/transactions" },
   // { icon: <MdContactPhone className="icon-md" />, text: "Enquiry", url: "/admin/enquiry" },
@@ -28,15 +28,15 @@ const adminList = [
 // ];
 
 const active_text = {
-  Dashboard: "dashboard",
-  Users: "user",
-  Warranty: "warranty",
-  "Sale Persons": "sale-person",
-  Tasks: "task",
+  Leads: "leads",
+  "Sale Insights": "sale-insights",
+  // "Active Sale Tasks": "warranty",
+  // "Sale Persons": "sale-person",
+  // Tasks: "task",
   Transaction: "transaction",
-  Enquiry: "enquiry",
-  Level: "level",
-  Plan: "plan",
+  // Enquiry: "enquiry",
+  // Level: "level",
+  // Plan: "plan",
 };
 
 export default function SideNavbar({ isExpanded }) {
@@ -56,6 +56,9 @@ export default function SideNavbar({ isExpanded }) {
   const activeLinkHandler = (text) => {
     // console.log("text", active_text[text]);
     // console.log(pathname.includes(active_text[text]));
+    if (text === 'Active Sales Tasks') {
+      return pathname.includes("warranty") || pathname.includes("active-sale-tasks");
+    }
     return pathname.includes(active_text[text]);
   };
 
