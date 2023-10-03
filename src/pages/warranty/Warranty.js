@@ -162,7 +162,7 @@ export default function Warranty() {
           <Card.Header>
             {/* isTitle="true" */}
             {/* title="Users" */}
-            <div className="float-end d-flex align-items-center">
+            {/* <div className="float-end d-flex align-items-center">
               <p className="p-bold m-0 me-3">Filter by Plan</p>
               <Form.Group controlId="plan">
                 <Form.Select
@@ -179,7 +179,7 @@ export default function Warranty() {
                   <option value={"supreme"}>Supreme</option>
                 </Form.Select>
               </Form.Group>
-            </div>
+            </div> */}
             <h3 className="mb-0">{`${statusObj[status]} Warranties`}</h3>
           </Card.Header>
           <Card.Body>

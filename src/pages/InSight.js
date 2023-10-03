@@ -66,6 +66,22 @@ export default function Dashboard() {
     return months;
   };
 
+  const weeklySales = (data) => {
+    const weeks = [
+      ['Week 1', 0],
+      ['Week 2', 0],
+      ['Week 3', 0],
+      ['Week 4', 0]
+    ];
+
+    data.forEach((x) => {
+      console.log({ x });
+      if (x.week) weeks[x.week - 1][1] = x.totalSales;
+    });
+    console.log({ weeks });
+    return weeks;
+  };
+
   useEffect(() => {
     console.log({ time });
     (async () => {
@@ -104,11 +120,31 @@ export default function Dashboard() {
             <Col md={6}>
               <h3>InSights</h3>
             </Col>
-            <Col md={6}></Col>
+            <Col md={6}>
+              <div className="float-md-end d-flex align-items-center">
+                <p className="p-bold m-0 me-3">InSights For</p>
+                <Form.Group controlId="time">
+                  <Form.Select
+                    value={time}
+                    onChange={(e) => {
+                      setTime(e.target.value);
+                    }}
+                    aria-label="Default select example"
+                  >
+                    <option key="blankChoice" hidden value>
+                      Select Time
+                    </option>
+                    {/* <option value="all">All Time Statistics</option> */}
+                    {/* <option value="daily">Daily Statistics</option> */}
+                    <option value="month">Monthly</option>
+                    <option value="year">Yearly</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+            </Col>
           </Row>
 
           <Container className="container-md">
-
             <Card className="mb-3">
               <Card.Header className="card-header-primary">
                 Sales Report
@@ -133,7 +169,7 @@ export default function Dashboard() {
                         }}
                         data={[
                           ["Weeks", "Total Sales"],
-                          ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
+                          ...weeklySales(summary.sales),
                         ]}
                       ></Chart> :
                       <Chart
@@ -152,7 +188,7 @@ export default function Dashboard() {
                         ]}
                       ></Chart>
                     }
-                    <div className="f-center graph-filter">
+                    {/* <div className="f-center graph-filter">
                       <Form.Group>
                         <Form.Check
                           inline
@@ -174,11 +210,13 @@ export default function Dashboard() {
                           onChange={(e) => { e.preventDefault(); setTime("year"); }}
                         />
                       </Form.Group>
-                    </div>
+                    </div> */}
                   </>
                 )}
               </Card.Body>
             </Card>
+
+
             <Card className="mb-3">
               <Card.Header className="card-header-primary">
                 Refund Report
@@ -186,7 +224,7 @@ export default function Dashboard() {
               <Card.Body className="p-0">
                 {loading ? (
                   <Skeleton count={5} height={30} />
-                ) : summary.sales.length === 0 ? (
+                ) : summary.refund.length === 0 ? (
                   <MessageBox>No Refund</MessageBox>
                 ) : (
                   <>
@@ -197,13 +235,17 @@ export default function Dashboard() {
                         height="400px"
                         chartType="ColumnChart"
                         options={{
+                          series: {
+                            0: { bar: { groupWidth: '50%' } }, // Set the bar width to 50%
+                          },
                           hAxis: { title: "Weeks" }, // X-axis label
-                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          vAxis: { title: "Total Refund" }, // Y-axis label
                           colors: ["#00ab41"],
+                          // bar: { groupWidth: '75%' },
                         }}
                         data={[
-                          ["Weeks", "Total Sales"],
-                          ...summary.sales.map((x) => [`Week ${x.week}`, x.totalSales]),
+                          ["Weeks", "Total Refund"],
+                          ...weeklySales(summary.refund)
                         ]}
                       ></Chart> :
                       <Chart
@@ -213,16 +255,16 @@ export default function Dashboard() {
                         chartType="ColumnChart"
                         options={{
                           hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                          vAxis: { title: "Total Sales" }, // Y-axis label
+                          vAxis: { title: "Total Refund" }, // Y-axis label
                           colors: ["#00ab41"],
                         }}
                         data={[
-                          ["Month", "Total Sales"],
-                          ...monthlySales(summary.sales)
+                          ["Month", "Total Refund"],
+                          ...monthlySales(summary.refund)
                         ]}
                       ></Chart>
                     }
-                    <div className="f-center graph-filter">
+                    {/* <div className="f-center graph-filter">
                       <Form.Group>
                         <Form.Check
                           inline
@@ -244,7 +286,7 @@ export default function Dashboard() {
                           onChange={(e) => { e.preventDefault(); setTime("year"); }}
                         />
                       </Form.Group>
-                    </div>
+                    </div> */}
                   </>
                 )}
               </Card.Body>
