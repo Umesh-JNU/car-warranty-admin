@@ -68,7 +68,8 @@ export default function Users() {
     // "Actions"
   ];
 
-  useTitle("Users");
+  // useTitle("Users");
+  useTitle("Leads");
   return (
     <MotionDiv>
       {error ? (
@@ -82,10 +83,11 @@ export default function Users() {
           paging={numOfPages > 0}
           pageProps={{ numOfPages, curPage }}
           pageHandler={curPageHandler}
-          search={true}
-          searchProps={{ searchInput, setSearchInput, setQuery }}
+          // search={false}
+          // searchProps={{ searchInput, setSearchInput, setQuery }}
           isTitle="true"
-          title="Users"
+          // title="Users"
+          title="Leads"
         >
           {users &&
             users.map((user, i) => (

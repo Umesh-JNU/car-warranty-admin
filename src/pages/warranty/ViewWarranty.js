@@ -137,10 +137,11 @@ const ViewWarranty = () => {
             <a href={warranty.document.url} target="_blank">{warranty.document.desc}</a>
             :
             <p className="mb-0">
-              <b>No Document</b>
+              {/* <b>No Document</b> */}
+              <Button variant="secondary" onClick={() => setDocShow(true)}>Upload Document</Button>
             </p>}
 
-            {/*  <>
+        {/*  <>
                <Col md={2}>
                  <p className="mb-0">
                    <strong>{warranty.document.desc}</strong>
@@ -173,9 +174,9 @@ const ViewWarranty = () => {
 
       </Row>
 
-      {role === 'sale-person' && <div className="my-3">
+      {/* {role === 'sale-person' && <div className="my-3">
         <Button variant="secondary" onClick={() => setDocShow(true)}>Upload Document</Button>
-      </div>}
+      </div>} */}
 
       <EditWarrantyModel
         show={modalShow}
@@ -184,7 +185,8 @@ const ViewWarranty = () => {
       <UploadDocument
         show={docShow}
         onHide={() => setDocShow(false)}
-        reload={async () => await getDetails(dispatch, token, id, role === 'sale-person')}
+        // reload={async () => await getDetails(dispatch, token, id, role === 'sale-person')}
+        reload={async () => await getDetails(dispatch, token, id)}
       />
       {!modalShow && !docShow && <ToastContainer />}
     </ViewCard >

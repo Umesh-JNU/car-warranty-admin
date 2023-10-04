@@ -23,7 +23,8 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        summary: action.payload,
+        sale: action.payload.sales,
+        refund: action.payload.refund,
         loading: false,
       };
     case "FETCH_FAIL":
@@ -33,14 +34,27 @@ const reducer = (state, action) => {
   }
 };
 
-export default function Dashboard() {
-  const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
+const ChartCard = ({ type }) => {
+  const [{ loading, sale, refund, error }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
   });
+
+  // const {sale, refund} = summary && summary;
+  const data = type === 'Sales' ? sale : refund;
+
   const { state } = useContext(Store);
   const { token } = state;
   const [time, setTime] = useState("month");
+  const [timeType, setTimeType] = useState();
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const currentDate = new Date();
+  const currentMonth = months[currentDate.getMonth()];
+  const currentYear = currentDate.getFullYear();
 
   const monthlySales = (data) => {
     const months = [
@@ -83,6 +97,10 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    setTimeType(time === 'month' ? currentMonth : currentYear);
+  }, [time]);
+
+  useEffect(() => {
     console.log({ time });
     (async () => {
       try {
@@ -108,20 +126,101 @@ export default function Dashboard() {
   }, [token, time]);
 
   return (
-    <MotionDiv>
+    <div>
       {error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <Row
-            className="my-3 pb-2"
-            style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
-          >
-            <Col md={6}>
-              <h3>InSights</h3>
-            </Col>
-            <Col md={6}>
-              <div className="float-md-end d-flex align-items-center">
+        <Card className="mb-3">
+          <Card.Header className="card-header-primary">
+            {type === 'Sales' ? 'Sales Report' : 'Refund Report'}
+          </Card.Header>
+          <Card.Body className="p-0">
+            {loading ? (
+              <Skeleton count={5} height={30} />
+            ) : data.length === 0 ? (
+              <MessageBox>{type === 'Sales' ? 'No Sales' : 'No Refund'}</MessageBox>
+            ) : (
+              <>
+                {time === "month" ?
+                  <Chart
+                    style={{ overflow: "hidden" }}
+                    width="100%"
+                    height="400px"
+                    chartType="ColumnChart"
+                    options={{
+                      series: {
+                        0: { bar: { groupWidth: '50%' } }, // Set the bar width to 50%
+                      },
+                      hAxis: { title: "Weeks" }, // X-axis label
+                      vAxis: { title: `Total ${type}` }, // Y-axis label
+                      colors: ["#00ab41"],
+                    }}
+                    data={[
+                      ["Weeks", `Total ${type} (${timeType})`],
+                      ...weeklySales(data),
+                    ]}
+                  ></Chart> :
+                  <Chart
+                    style={{ overflow: "hidden", top: 0 }}
+                    width="100%"
+                    height="400px"
+                    chartType="ColumnChart"
+                    options={{
+                      hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
+                      vAxis: { title: `Total ${type}` }, // Y-axis label
+                      colors: ["#00ab41"],
+                    }}
+                    data={[
+                      ["Month", `Total ${type} (${timeType})`],
+                      ...monthlySales(data)
+                    ]}
+                  ></Chart>
+                }
+                <div className="f-center graph-filter">
+                  <Form.Group>
+                    {/* {time==='month' && <p>{new Date().getMonth()}</p>} */}
+                    <Form.Check
+                      inline
+                      label="Month"
+                      type="radio"
+                      checked={time === "month"}
+                      // name="filterOption"
+                      // value="month"
+                      onChange={(e) => { e.preventDefault(); setTime("month"); }}
+                    />
+
+                    <Form.Check
+                      inline
+                      label="Year"
+                      type="radio"
+                      checked={time === "year"}
+                      // name="filterOption"
+                      // value="year"
+                      onChange={(e) => { e.preventDefault(); setTime("year"); }}
+                    />
+                  </Form.Group>
+                </div>
+              </>
+            )}
+          </Card.Body>
+        </Card>
+      )}
+    </div>
+  )
+};
+
+export default function Dashboard() {
+  return (
+    <MotionDiv>
+      <Row
+        className="my-3 pb-2"
+        style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
+      >
+        <Col md={6}>
+          <h3>InSights</h3>
+        </Col>
+        <Col md={6}>
+          {/* <div className="float-md-end d-flex align-items-center">
                 <p className="p-bold m-0 me-3">InSights For</p>
                 <Form.Group controlId="time">
                   <Form.Select
@@ -134,168 +233,22 @@ export default function Dashboard() {
                     <option key="blankChoice" hidden value>
                       Select Time
                     </option>
-                    {/* <option value="all">All Time Statistics</option> */}
-                    {/* <option value="daily">Daily Statistics</option> */}
+                    <option value="all">All Time Statistics</option>
+                    <option value="daily">Daily Statistics</option>
                     <option value="month">Monthly</option>
                     <option value="year">Yearly</option>
                   </Form.Select>
                 </Form.Group>
-              </div>
-            </Col>
-          </Row>
+              </div> */}
+        </Col>
+      </Row>
 
-          <Container className="container-md">
-            <Card className="mb-3">
-              <Card.Header className="card-header-primary">
-                Sales Report
-              </Card.Header>
-              <Card.Body className="p-0">
-                {loading ? (
-                  <Skeleton count={5} height={30} />
-                ) : summary.sales.length === 0 ? (
-                  <MessageBox>No Sales</MessageBox>
-                ) : (
-                  <>
-                    {time === "month" ?
-                      <Chart
-                        style={{ overflow: "hidden" }}
-                        width="100%"
-                        height="400px"
-                        chartType="ColumnChart"
-                        options={{
-                          hAxis: { title: "Weeks" }, // X-axis label
-                          vAxis: { title: "Total Sales" }, // Y-axis label
-                          colors: ["#00ab41"],
-                        }}
-                        data={[
-                          ["Weeks", "Total Sales"],
-                          ...weeklySales(summary.sales),
-                        ]}
-                      ></Chart> :
-                      <Chart
-                        style={{ overflow: "hidden", top: 0 }}
-                        width="100%"
-                        height="400px"
-                        chartType="ColumnChart"
-                        options={{
-                          hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                          vAxis: { title: "Total Sales" }, // Y-axis label
-                          colors: ["#00ab41"],
-                        }}
-                        data={[
-                          ["Month", "Total Sales"],
-                          ...monthlySales(summary.sales)
-                        ]}
-                      ></Chart>
-                    }
-                    {/* <div className="f-center graph-filter">
-                      <Form.Group>
-                        <Form.Check
-                          inline
-                          label="Month"
-                          type="radio"
-                          checked={time === "month"}
-                          // name="filterOption"
-                          // value="month"
-                          onChange={(e) => { e.preventDefault(); setTime("month"); }}
-                        />
+      <Container className="container-md">
+        <ChartCard type="Sales" />
+        <ChartCard type="Refund" />
+      </Container>
 
-                        <Form.Check
-                          inline
-                          label="Year"
-                          type="radio"
-                          checked={time === "year"}
-                          // name="filterOption"
-                          // value="year"
-                          onChange={(e) => { e.preventDefault(); setTime("year"); }}
-                        />
-                      </Form.Group>
-                    </div> */}
-                  </>
-                )}
-              </Card.Body>
-            </Card>
-
-
-            <Card className="mb-3">
-              <Card.Header className="card-header-primary">
-                Refund Report
-              </Card.Header>
-              <Card.Body className="p-0">
-                {loading ? (
-                  <Skeleton count={5} height={30} />
-                ) : summary.refund.length === 0 ? (
-                  <MessageBox>No Refund</MessageBox>
-                ) : (
-                  <>
-                    {time === "month" ?
-                      <Chart
-                        style={{ overflow: "hidden" }}
-                        width="100%"
-                        height="400px"
-                        chartType="ColumnChart"
-                        options={{
-                          series: {
-                            0: { bar: { groupWidth: '50%' } }, // Set the bar width to 50%
-                          },
-                          hAxis: { title: "Weeks" }, // X-axis label
-                          vAxis: { title: "Total Refund" }, // Y-axis label
-                          colors: ["#00ab41"],
-                          // bar: { groupWidth: '75%' },
-                        }}
-                        data={[
-                          ["Weeks", "Total Refund"],
-                          ...weeklySales(summary.refund)
-                        ]}
-                      ></Chart> :
-                      <Chart
-                        style={{ overflow: "hidden", top: 0 }}
-                        width="100%"
-                        height="400px"
-                        chartType="ColumnChart"
-                        options={{
-                          hAxis: { slantedText: true, slantedTextAngle: 45, title: "Months" }, // X-axis label
-                          vAxis: { title: "Total Refund" }, // Y-axis label
-                          colors: ["#00ab41"],
-                        }}
-                        data={[
-                          ["Month", "Total Refund"],
-                          ...monthlySales(summary.refund)
-                        ]}
-                      ></Chart>
-                    }
-                    {/* <div className="f-center graph-filter">
-                      <Form.Group>
-                        <Form.Check
-                          inline
-                          label="Month"
-                          type="radio"
-                          checked={time === "month"}
-                          // name="filterOption"
-                          // value="month"
-                          onChange={(e) => { e.preventDefault(); setTime("month"); }}
-                        />
-
-                        <Form.Check
-                          inline
-                          label="Year"
-                          type="radio"
-                          checked={time === "year"}
-                          // name="filterOption"
-                          // value="year"
-                          onChange={(e) => { e.preventDefault(); setTime("year"); }}
-                        />
-                      </Form.Group>
-                    </div> */}
-                  </>
-                )}
-              </Card.Body>
-            </Card>
-          </Container>
-
-          <ToastContainer />
-        </>
-      )}
+      <ToastContainer />
     </MotionDiv >
   );
 }

@@ -60,7 +60,7 @@ const card = [
     key: "toExpired",
     bg: "warning",
     icon: <HiShieldExclamation />,
-    text: "Expired Warranties In 30 Days",
+    text: "Expiring Warranties In 30 Days",
     url: "/admin/warranty/?status=TO-BE-EXPIRED"
   },
   {

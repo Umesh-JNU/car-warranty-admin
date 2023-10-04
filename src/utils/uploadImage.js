@@ -48,7 +48,8 @@ export const uploadPDF = async (file, token, percentHandler) => {
       },
     };
     const { data } = await axiosInstance.post(
-      "/api/sale-person/upload-doc",
+      // "/api/sale-person/upload-doc",
+      "/api/admin/upload-doc",
       bodyFormData,
       options
     );

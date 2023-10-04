@@ -24,14 +24,28 @@ import { toastOptions } from "../../utils/error";
 import SalePersonModal from "./SalePersonModal";
 
 const statusObj = {
-  'AWAITED': 'Awaited',
-  'ACTIVE': 'Active',
-  'REJECTED': 'Rejected',
-  'TO-BE-EXPIRED': 'To-be-expired',
-  'EXPIRED': 'Expired',
+  'AWAITED': 'Awaited Warranties',
+  'ACTIVE': 'Active Warranties',
+  'REJECTED': 'Rejected Warranties',
+  'TO-BE-EXPIRED': 'Expiring Warranties In 30 Days',
+  'EXPIRED': 'Expired Warranties',
 };
 
 const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
+  const [searchParams, _] = useSearchParams(document.location.search);
+  const sts = searchParams.get('status');
+
+  const options = sts === 'AWAITED' ?
+    [
+      { "inspection-failed": "Inspection Failed" },
+      { "inspection-awaited": "Inspection Awaited" },
+      { "inspection-passed": "Inspection Passed" }
+    ] :
+    sts === 'REJECTED' ?
+      [
+        { "inspection-failed": "Inspection Failed" }, { "refunded": "Refunded" }
+      ] : [];
+
   // const [value, setValue] = useState(status);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
 
@@ -48,19 +62,20 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
     loadingUpdate ? <Spinner animation="border" size="sm" /> :
       <SelectInput
         placeholder="Change Status"
-        options={[
-          { "inspection-failed": "Inspection Failed" },
-          { "inspection-awaited": "Inspection Awaited" },
-          { "inspection-passed": "Inspection Passed" },
-          { "order-placed": "Order Placed" },
-          { "doc-delivered": "Document Delivered" },
-          { "refunded": "Refunded" },
-          // { "claim-requested": "Claim Requested" },
-          // { "claim-inspection": "Claim Inspection" },
-          // { "claim-inspection-failed": "Claim Inspection Failed" },
-          // { "claim-in-progress": "Claim In-Progress" },
-          // { "claim-setteled": "Claim Settled" }
-        ]}
+        options={options}
+        // [
+        //   { "inspection-failed": "Inspection Failed" },
+        //   { "inspection-awaited": "Inspection Awaited" },
+        //   { "inspection-passed": "Inspection Passed" },
+        //   { "order-placed": "Order Placed" },
+        //   { "doc-delivered": "Document Delivered" },
+        //   { "refunded": "Refunded" },
+        // { "claim-requested": "Claim Requested" },
+        // { "claim-inspection": "Claim Inspection" },
+        // { "claim-inspection-failed": "Claim Inspection Failed" },
+        // { "claim-in-progress": "Claim In-Progress" },
+        // { "claim-setteled": "Claim Settled" }
+        // ]}
         grpStyle="mb-0"
         onChange={handleStatus}
         value={status}
@@ -147,9 +162,11 @@ export default function Warranty() {
     "Car Model",
     "Plan Type",
     // "Sale Person",
-    "Status",
     "Actions"
   ];
+
+  if (status === 'AWAITED' || status === 'REJECTED')
+    column.splice(6, 0, 'Status');
 
   // useTitle(role === 'admin' ? "Warranty Table" : "My Tasks");
   useTitle("All Tasks");
@@ -180,7 +197,7 @@ export default function Warranty() {
                 </Form.Select>
               </Form.Group>
             </div> */}
-            <h3 className="mb-0">{`${statusObj[status]} Warranties`}</h3>
+            <h3 className="mb-0">{`${statusObj[status]}`}</h3>
           </Card.Header>
           <Card.Body>
             <Table responsive striped bordered hover>
@@ -201,21 +218,22 @@ export default function Warranty() {
                       <td>{warranty.vehicleDetails?.model}</td>
                       <td>{warranty.plan?.level?.level}</td>
                       {/* <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td> */}
-                      <td>
-                        <ChangeStatus
-                          status={warranty.status}
-                          warrantyId={warranty._id}
-                          token={token}
-                          success={success}
-                          loading={loadingUpdate}
-                          dispatch={dispatch}
-                        />
-                      </td>
+                      {(status === 'AWAITED' || status === 'REJECTED') &&
+                        <td>
+                          <ChangeStatus
+                            status={warranty.status}
+                            warrantyId={warranty._id}
+                            token={token}
+                            success={success}
+                            loading={loadingUpdate}
+                            dispatch={dispatch}
+                          />
+                        </td>}
                       {/* <td>{warranty.status}</td> */}
                       <td>
                         {/* <AssignButton onClick={() => { setShow(true); setWarrantyID(warranty._id); }} /> */}
-                        {/* <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} /> */}
-                        <DeleteButton onClick={() => deleteWarranty(warranty._id)} />
+                        <ViewButton onClick={() => navigate(`/admin/view/warranty/${warranty._id}`)} />
+                        {['AWAITED', 'REJECTED', 'EXPIRED'].includes(status) && <DeleteButton onClick={() => deleteWarranty(warranty._id)} />}
                       </td>
                     </tr>
                   ))

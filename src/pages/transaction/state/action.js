@@ -77,6 +77,7 @@ export const getDetails = async (dispatch, token, id) => {
       headers: { Authorization: token },
     });
 
+    console.log({ data }, "getTransaction")
     dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
   } catch (err) {
     dispatch({

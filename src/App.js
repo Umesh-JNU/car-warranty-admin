@@ -22,7 +22,7 @@ function App() {
     { path: "/admin/leads", comp: <Users /> },
     // { path: "/admin/view/user/:id", comp: <ViewUser /> },
     { path: "/admin/warranty", comp: <Warranty /> },
-    // { path: "/admin/view/warranty/:id", comp: <ViewWarranty /> },
+    { path: "/admin/view/warranty/:id", comp: <ViewWarranty /> },
     // { path: "/admin/sale-person", comp: <SalePerson /> },
     // { path: "/admin/sale-person/create", comp: <AddSalePerson /> },
     // { path: "/admin/view/sale-person/:id", comp: <ViewSalePerson /> },

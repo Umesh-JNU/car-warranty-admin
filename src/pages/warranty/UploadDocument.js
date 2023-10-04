@@ -7,6 +7,7 @@ import { EditForm, TextInput } from "../../components";
 import { uploadPDF } from "../../utils/uploadImage";
 import { Col, ProgressBar, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { toastOptions } from "../../utils/error";
 
 export default function UploadDocument(props) {
   const { state } = useContext(Store);
@@ -71,11 +72,17 @@ export default function UploadDocument(props) {
   const resetForm = () => { setDoc(""); setDesc(""); };
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    await update(dispatch, token, id, { document: { url: doc, desc } }, userInfo?.role === 'sale-person');
+    console.log({ doc })
+    if (!doc) {
+      toast.warning("Please select a document or wait for uploading.", toastOptions);
+      return;
+    }
+    // await update(dispatch, token, id, { document: { url: doc, desc } }, userInfo?.role === 'sale-person');
+    await update(dispatch, token, id, { document: { url: doc, desc } });
     console.log({ success })
 
     if (success) resetForm();
+    e.target.files = null;
   };
 
   return (
@@ -108,6 +115,8 @@ export default function UploadDocument(props) {
               label={`${uploadPercentage}%`}
             />
           )}
+
+          <p>{doc}</p>
         </Col>
       </Row>
     </EditForm>
