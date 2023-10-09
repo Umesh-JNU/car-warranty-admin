@@ -70,7 +70,7 @@ export const update = async (dispatch, token, id, warrantyInfo, isSalePerson = f
   }
 };
 
-export const updateStatus = async (dispatch, token, id, warrantyInfo) => {
+export const updateStatus = async (dispatch, token, id, warrantyInfo, statusType) => {
   console.log({ warrantyInfo });
   // const url = `/api/sale-person/warranty/${id}`;
   const url = `/api/admin/warranty/${id}`;
@@ -86,7 +86,8 @@ export const updateStatus = async (dispatch, token, id, warrantyInfo) => {
         type: "UPDATE_STATUS",
         payload: {
           warrantyId: id,
-          newStatus: warrantyInfo.status
+          newStatus: warrantyInfo.status,
+          statusType
         }
       })
     }, 2000);

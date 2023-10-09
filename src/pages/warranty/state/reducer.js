@@ -35,8 +35,18 @@ export default function warrantyReducer(state, action) {
       };
     case "UPDATE_STATUS":
       console.log({ payload: action.payload })
-      var { warrantyId, newStatus } = action.payload;
-      var updatedwarrantyList = state.warranties.filter(warranty => warranty._id !== warrantyId);
+      var { warrantyId, newStatus, statusType } = action.payload;
+      if (statusType === 'PASSED') {
+        var updatedwarrantyList = state.warranties.map(warranty => {
+          if (warranty._id === warrantyId) {
+            return { ...warranty, status: { ...warranty.status, value: newStatus } };
+          }
+          return warranty;
+        });
+      }
+      else {
+        var updatedwarrantyList = state.warranties.filter(warranty => warranty._id !== warrantyId);
+      }
 
       console.log({ updatedwarrantyList })
       return {

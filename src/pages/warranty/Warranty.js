@@ -60,7 +60,7 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
   const handleStatus = async (e) => {
     e.preventDefault();
     setLoadingUpdate(true);
-    await updateStatus(dispatch, token, warrantyId, { status: e.target.value });
+    await updateStatus(dispatch, token, warrantyId, { status: e.target.value }, sts);
     setTimeout(() => {
       setLoadingUpdate(false);
     }, 2000);

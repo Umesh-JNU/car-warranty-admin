@@ -59,10 +59,11 @@ export default function Transactions() {
 
   const column = [
     "S.No",
-		"Plan",
-		"Amount",
-		"Status",
-		// "Warranty",
+    "Plan",
+    "Amount",
+    "Status",
+    // "Warranty",
+    // "Last Updated",
     "Actions"
   ];
 
@@ -82,19 +83,20 @@ export default function Transactions() {
           pageHandler={curPageHandler}
           isTitle={true}
           title="Transactions"
-          // search={true}
-          // searchProps={{ searchInput, setSearchInput, setQuery }}
-          // isCreateBtn={true}
-          // createBtnProps={{ createURL: "/admin/transaction/create", text: "Transaction" }}
+        // search={true}
+        // searchProps={{ searchInput, setSearchInput, setQuery }}
+        // isCreateBtn={true}
+        // createBtnProps={{ createURL: "/admin/transaction/create", text: "Transaction" }}
         >
           {transactions &&
             transactions.map((transaction, i) => (
               <tr key={transaction._id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
-								<td>{transaction.plan}</td>
-								<td>{transaction.amount}</td>
-								<td>{transaction.warranty?.status?.value === 'refunded' ? 'refunded' : transaction.status}</td>
-								{/* <td>{transaction.warranty}</td> */}
+                <td>{transaction.plan}</td>
+                <td>{transaction.amount}</td>
+                <td>{transaction.warranty?.status?.value === 'refunded' ? 'refunded' : transaction.status}</td>
+                {/* <td>{transaction.warranty}</td> */}
+                {/* <td>{(transaction.warranty?.status?.value === 'refunded' ? transaction.warranty.status.statusAt : transaction.updatedAt).slice(0, 10)}</td> */}
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/transaction/${transaction._id}`)}
