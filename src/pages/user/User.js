@@ -34,7 +34,7 @@ export default function Users() {
       loading: true,
       error: "",
     });
-
+  console.log({ users })
   const deleteUser = async (id) => {
     await del(dispatch, token, id);
   };
@@ -59,12 +59,13 @@ export default function Users() {
 
   const column = [
     "S.No",
-		"Email",
-		"Firstname",
-		"Lastname",
-		"Mobile No.",
+    "Date",
+    "Email",
+    "Firstname",
+    "Lastname",
+    "Mobile No.",
     "Status"
-		// "Role",
+    // "Role",
     // "Actions"
   ];
 
@@ -90,15 +91,16 @@ export default function Users() {
           title="Leads"
         >
           {users &&
-            users.map((user, i) => (
+            users.map(({ user, status, updatedAt }, i) => (
               <tr key={user._id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
-								<td>{user.email}</td>
-								<td>{user.firstname}</td>
-								<td>{user.lastname}</td>
-								<td>{user.mobile_no}</td>
-								<td>{user.status}</td>
-								{/* <td>{user.role}</td>
+                <td>{updatedAt?.slice(0, 10)}</td>
+                <td>{user.email}</td>
+                <td>{user.firstname}</td>
+                <td>{user.lastname}</td>
+                <td>{user.mobile_no}</td>
+                <td>{status}</td>
+                {/* <td>{user.role}</td>
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/user/${user._id}`)}
