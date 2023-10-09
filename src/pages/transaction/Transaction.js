@@ -93,7 +93,7 @@ export default function Transactions() {
                 <td className="text-center">{skip + i + 1}</td>
 								<td>{transaction.plan}</td>
 								<td>{transaction.amount}</td>
-								<td>{transaction.warranty?.status === 'refunded' ? 'refunded' : transaction.status}</td>
+								<td>{transaction.warranty?.status?.value === 'refunded' ? 'refunded' : transaction.status}</td>
 								{/* <td>{transaction.warranty}</td> */}
                 <td>
                   <ViewButton

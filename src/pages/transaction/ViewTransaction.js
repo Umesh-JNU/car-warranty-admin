@@ -77,7 +77,7 @@ const ViewTransaction = () => {
   return (
     <ViewCard
       title={"Transaction Details"}
-      data={transaction && { ...transaction, warranty: transaction.warranty._id, status: transaction.warranty?.status === 'refunded' ? 'refunded' : transaction.status }}
+      data={transaction && { ...transaction, warranty: transaction.warranty._id, status: transaction.warranty?.status?.value === 'refunded' ? 'refunded' : transaction.status }}
       setModalShow={setModalShow}
       keyProps={keyProps}
       reducerProps={{ error, loading, dispatch }}
