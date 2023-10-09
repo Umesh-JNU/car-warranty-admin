@@ -40,7 +40,7 @@ const dynamicComp = (val) => {
 };
 
 const keyProps = {
-  "Plan Start Date": "start_date", "Status": "status", "Created At": "createdAt", "Last Update": "updatedAt"
+  "Plan Start Date": "start_date", "Status": "value", "Created At": "createdAt", "Last Update": "updatedAt"
 };
 
 const Details = ({ title, loading, data, detailKey, fields }) => {
@@ -95,7 +95,7 @@ const ViewWarranty = () => {
   return (
     <ViewCard
       title={"Warranty Details"}
-      data={warranty}
+      data={warranty && { ...warranty, value: warranty.status.value }}
       setModalShow={setModalShow}
       keyProps={keyProps}
       reducerProps={{ error, loading, dispatch }}
@@ -181,6 +181,7 @@ const ViewWarranty = () => {
       <EditWarrantyModel
         show={modalShow}
         onHide={() => setModalShow(false)}
+        reload={async () => await getDetails(dispatch, token, id)}
       />
       <UploadDocument
         show={docShow}

@@ -43,16 +43,23 @@ const card = [
     url: "/admin/warranty/?status=AWAITED"
   },
   {
+    key: "passed",
+    bg: "success-1",
+    icon: <HiShieldCheck />,
+    text: "Passed Warranties",
+    url: "/admin/warranty/?status=PASSED"
+  },
+  {
     key: "active",
     bg: "success",
-    icon: <BiSolidShieldX />,
+    icon: <HiShieldCheck />,
     text: "Active Warranties",
     url: "/admin/warranty/?status=ACTIVE"
   },
   {
     key: "rejected",
     bg: "danger",
-    icon: <HiShieldCheck />,
+    icon: <BiSolidShieldX />,
     text: "Rejected Warranties",
     url: "/admin/warranty/?status=REJECTED"
   },

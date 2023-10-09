@@ -25,6 +25,7 @@ import SalePersonModal from "./SalePersonModal";
 
 const statusObj = {
   'AWAITED': 'Awaited Warranties',
+  'PASSED': 'Passed Warranties',
   'ACTIVE': 'Active Warranties',
   'REJECTED': 'Rejected Warranties',
   'TO-BE-EXPIRED': 'Expiring Warranties In 30 Days',
@@ -44,7 +45,14 @@ const ChangeStatus = ({ status, warrantyId, token, dispatch }) => {
     sts === 'REJECTED' ?
       [
         { "inspection-failed": "Inspection Failed" }, { "refunded": "Refunded" }
-      ] : [];
+      ] :
+      sts === 'PASSED' ?
+        [
+          { "inspection-passed": "Inspection Passed" },
+          // { "order-placed": "Order Placed" },
+          { "doc-delivered": "Document Delivered" }
+        ]
+        : [];
 
   // const [value, setValue] = useState(status);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -165,7 +173,7 @@ export default function Warranty() {
     "Actions"
   ];
 
-  if (status === 'AWAITED' || status === 'REJECTED')
+  if (status === 'AWAITED' || status === 'REJECTED' || status === 'PASSED')
     column.splice(6, 0, 'Status');
 
   // useTitle(role === 'admin' ? "Warranty Table" : "My Tasks");
@@ -218,10 +226,10 @@ export default function Warranty() {
                       <td>{warranty.vehicleDetails?.model}</td>
                       <td>{warranty.plan?.level?.level}</td>
                       {/* <td>{warranty.salePerson ? `${warranty.salePerson.firstname} ${warranty.salePerson.lastname}` : "Not Assigned"}</td> */}
-                      {(status === 'AWAITED' || status === 'REJECTED') &&
+                      {(status === 'AWAITED' || status === 'REJECTED' || status === 'PASSED') &&
                         <td>
                           <ChangeStatus
-                            status={warranty.status}
+                            status={warranty.status.value}
                             warrantyId={warranty._id}
                             token={token}
                             success={success}

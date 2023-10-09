@@ -406,3 +406,7 @@ table.table {
 .toggle-link-item:hover {
   color: #aa4bff;
 }
+
+.bg-success-1 {
+  background-color: #008080;
+}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import reducer from "./state/reducer";
 import { getDetails, update } from "./state/action";
 import { EditForm, SelectInput, TextInput } from "../../components";
@@ -10,6 +10,10 @@ export default function EditWarrantyModel(props) {
   const { state } = useContext(Store);
   const { userInfo, token } = state;
   const { id } = useParams();  // warranty/:id
+
+  const [searchParams, _] = useSearchParams(document.location.search);
+  const status = searchParams.get('status');
+  console.log({ status });
 
   const [role, setRole] = useState(userInfo?.role);
   const [{ loading, error, loadingUpdate, warranty, success }, dispatch] = useReducer(reducer, {
@@ -39,7 +43,7 @@ export default function EditWarrantyModel(props) {
       props: {
         label: "Status",
         name: "status",
-        value: 'awaited',
+        // value: warranty && warranty.status.value,
         placeholder: "Select Status",
         options: [
           { "inspection-failed": "Inspection Failed" },
@@ -67,7 +71,7 @@ export default function EditWarrantyModel(props) {
       console.log({ warranty })
       setInfo({
         start_date: new Date(warranty.start_date).toISOString().slice(0, 10),
-        status: warranty.status,
+        status: warranty.status.value,
         vehicleDetails: {
           ...warranty.vehicleDetails,
           date_first_reg: new Date(warranty.vehicleDetails.date_first_reg).toISOString().slice(0, 10)
@@ -99,7 +103,7 @@ export default function EditWarrantyModel(props) {
       setData={setInfo}
       inputFieldProps={warrantyAttr}
       submitHandler={submitHandler}
-      target={role === 'admin' ? "/admin/warranty" : "/sale-person/tasks"}
+      // target={role === 'admin' ? `/admin/warranty/?status=${status}` : "/sale-person/tasks"}
       successMessage="Warranty Updated Successfully! Redirecting..."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >
